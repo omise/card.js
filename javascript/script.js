@@ -3,12 +3,12 @@
 //= require_self
 
 $(function() {
-  $('.container-form-modal').addClass('animated bounceInDown');
+  $('body').addClass('show-time');
 });
 
 $(".call-modal").on("click", function(){
   $("#modal").load($(this).attr("page"));
-  $('#modal').addClass('loading-form animated bounceIn');
+  $('#modal').addClass('loading-form');
   $('.call-modal').addClass('hide');
-  $('body').addClass('animated');
+  $('#modal').addClass('animated bounceIn');
 });

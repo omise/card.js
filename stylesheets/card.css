@@ -3,7 +3,6 @@ body {
   font-family: 'Open Sans',Helvetica,Arial,sans-serif;
   font-size:1em;
   font-weight:normal;
-  background:transparent;
 }
 *, *:before, *:after {
   -webkit-box-sizing: border-box;
@@ -15,12 +14,9 @@ img {
   max-width:100%;
 }
 
-.container-form-modal {
-  margin:20% auto;
-}
 .checkout-card {
   max-width: 300px;
-  margin:15px auto;
+  margin:20% auto;
   font-weight:100;
 }
 
@@ -41,22 +37,23 @@ img {
   font-size: 18px;
   margin:10px auto;
 }
-html {
-  background: url(../images/bg-checkout.png) no-repeat center center fixed  #2c2c2c;
+.checkout-page {
+  background-color: #2c2c2c;
+  background: url(../images/bg-checkout.png) no-repeat center center fixed;
   -webkit-background-size: cover;
   -moz-background-size: cover;
   -o-background-size: cover;
   background-size: cover;
-  margin: 0;
-  padding:0;
   height:100%;
+  width:100%;
 }
+
 .btn-checkout {
   background-image: -moz-linear-gradient( 90deg, rgb(35,166,213) 0%, rgb(34,214,214) 100%);
   background-image: -webkit-linear-gradient( 90deg, rgb(35,166,213) 0%, rgb(34,214,214) 100%);
   background-image: -ms-linear-gradient( 90deg, rgb(35,166,213) 0%, rgb(34,214,214) 100%);
-  border:none;
   border-radius: 5px;
+  border:none;
   height: 60px;
   display: block;
   margin: 0 10px;
@@ -66,11 +63,6 @@ html {
   font-weight: bold;
   font-size: 18px;
   position:relative;
-}
-
-.submit-card>.btn-checkout{
-  width:100%;
-  margin:0;
 }
 
 .btn-checkout:hover {
@@ -91,6 +83,7 @@ html {
 }
 #modal {
   height:0;
+  overflow:hidden;
   z-index: 99999;
   opacity:0;
   height: auto;
@@ -102,10 +95,13 @@ html {
   pointer-events: none;
 }
 #modal:target {
-  height:auto;
   opacity:1;
   visibility: visible;
   pointer-events: auto;
+}
+
+#modal.loading-form {
+  height:400px;
 }
 .container-form-checkout {
   height:0;
@@ -117,6 +113,7 @@ html {
   -webkit-transition: all 0.3s;
   -moz-transition: all 0.3s;
   transition: all 0.3s;
+  overflow:hidden;
 }
 #modal:target .container-form-checkout {
   background: #fff;
@@ -128,13 +125,12 @@ html {
   border-radius: 4px;
   max-width: 400px;
   height:auto;
-  padding:25px 25px 30px;
+  padding: 20px;
   -webkit-transform: scale(1);
   -moz-transform: scale(1);
   -ms-transform: scale(1);
   transform: scale(1);
   opacity: 1;
-  position:relative;
 }
 
 .loading-form+.btn-checkout {
@@ -143,21 +139,14 @@ html {
 
 
 .input-data-checkout {
-  margin-bottom:10px;
+  margin-bottom:8px;
   position:relative;
 }
-
-.group-data,
-.input-data-checkout.group-data {
-  margin-bottom:25px;
-}
-
 .type-card {
   position:absolute;
   top: 0;
   right:10px;
 }
-
 .input-data-checkout input {
   font-size:1em;
   border:none;
@@ -169,73 +158,16 @@ html {
   height: 40px;
   padding:8px;
 }
-
 .input-data-checkout .verify-card-number {
   padding-right:80px;
 }
 
-.submit-card {
-  position: absolute;
-  right: 25px;
-  left: 25px;
-}
 
-.row.mm-yy-cvc {
-  margin: 0 -5px -10px;
-}
-
-.row.mm-yy-cvc .col-md-6 {
-  width:50%;
-  float:left;
-  padding: 0 5px;
-}
-
-
-@media (max-width: 480px) {
-  .input-data-checkout input {
-    background: #fff;
-    box-shadow:none;
-    border: 1px solid #ccc;
-  }
-  body.animated .logo-merchant {
-    width: 64px;
-    height:64px;
-  }
-  .container-form-modal {
-    margin-top: 120px;
-  }
-  .animated .container-form-modal,
-  .checkout-card {
-    margin:0;
-    max-width:none;
-  }
-  body.animated .merchant-name  {
-    padding:4% 0;
-    height:120px;
-  }
-  body.animated .merchant-name {
-    background:rgba(0,0,0,.3);
-  }
-  #modal:target .container-form-checkout {
-    border-radius: 0;
-    border: none;
-    padding:25px 10px 80px 10px;
-  }
-  .submit-card  {
-    position: fixed;
-    left:0;
-    right: 0;
-    bottom: 0;
-  }
-  .submit-card>.btn-checkout {
-    border-radius:0;
-    text-shadow:0 1px 1px #000;
-  }
-  .group-data, .input-data-checkout.group-data {
-    margin-bottom: 8px;
-  }
+@media screen and (max-width:480px) {
 
 }
+
+
 
 
 
