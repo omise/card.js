@@ -1,33 +1,97 @@
-<div class="container-form-checkout">
-  <form method="post" class="CheckOut">
-    <div class="input-data-checkout">
-      <input id="full_name" type="text" x-autocompletetype="text" autocompletetype="text" autocorrect="off" spellcheck="off" autocapitalize="off" placeholder="Full Name">
-    </div>
-    <br>
-    <div class="input-data-checkout">
-      <input class="verify-card-number" id="card_number" type="tel" x-autocompletetype="cc-number" autocompletetype="cc-number" autocorrect="off" spellcheck="off" autocapitalize="off" placeholder="Card number"/>
-      <span class="type-card"> <img src="images/visa-card-checkout.png"/></span>
-    </div>
-
-
-    <div class="row">
-      <div class="col-md-6 input-data-checkout">
-        <input class="control" id="cc-exp" type="text" x-autocompletetype="off" autocompletetype="off" autocorrect="off" spellcheck="off" autocapitalize="off" placeholder="MM / YY">
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Card.js</title>
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <meta name="format-detection" content="telephone=no">
+  <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1.0, maximum-scale=1.0, target-densitydpi=device-dpi, user-scalable=no, minimal-ui">
+  <style>
+    .OmiseCard {
+      display:block;
+    }
+  </style>
+</head>
+<body>
+  <form action="" id="checkout">
+    <div class="OmiseCard">
+      <div class="input-data-checkout group-data">
+        <input id="full_name" type="text" x-autocompletetype="text" autocompletetype="text" autocorrect="off" spellcheck="off" autocapitalize="off" placeholder="Full Name" autofocus />
       </div>
-      <div class="col-md-6 input-data-checkout">
-        <input class="control" id="cc-csc" type="tel" autocomplete="off" autocorrect="off" spellcheck="off" autocapitalize="off" placeholder="CVC" maxlength="4">
+
+
+      <div class="group-data">
+        <div class="input-data-checkout">
+          <input class="verify-card-number" id="card_number" type="tel" x-autocompletetype="cc-number" autocompletetype="cc-number" autocorrect="off" spellcheck="off" autocapitalize="off" placeholder="Card number"/>
+          <span class="type-card"><img src="images/visa-card-checkout.png"/></span>
+        </div>
+
+
+        <div class="row mm-yy-cvc">
+          <div class="col-md-6 input-data-checkout">
+            <input class="control" id="cc-exp" type="text" x-autocompletetype="off" autocompletetype="off" autocorrect="off" spellcheck="off" autocapitalize="off" placeholder="MM / YY">
+          </div>
+          <div class="col-md-6 input-data-checkout">
+            <input class="control" id="cc-csc" type="tel" autocomplete="off" autocorrect="off" spellcheck="off" autocapitalize="off" placeholder="CVC" maxlength="4">
+          </div>
+        </div>
+      </div>
+
+
+      <div class="input-data-checkout">
+        <input id="" type="text" x-autocompletetype="text" autocompletetype="text" autocorrect="off" spellcheck="off" autocapitalize="off" placeholder="Postal code *option">
+      </div>
+
+      <div class="input-data-checkout">
+        <input id="" type="text" x-autocompletetype="text" autocompletetype="text" autocorrect="off" spellcheck="off" autocapitalize="off" placeholder="City *option">
       </div>
     </div>
-    <br>
-    <div class="input-data-checkout">
-      <input id="" type="text" x-autocompletetype="text" autocompletetype="text" autocorrect="off" spellcheck="off" autocapitalize="off" placeholder="Postal code *option">
-    </div>
-
-    <div class="input-data-checkout">
-      <input id="" type="text" x-autocompletetype="text" autocompletetype="text" autocorrect="off" spellcheck="off" autocapitalize="off" placeholder="City *option">
-    </div>
-    <div><button class="btn-checkout">PAY now  ฿11,851.05</button></div>
   </form>
-</div>
-<!-- <a href="#close" class="close-modal">X</a> -->
 
+  <script src="javascript/jquery.js"></script>
+  <script>
+    $("#checkout").submit(function () {
+
+      var form = $(this);
+
+  // Disable the submit button to avoid repeated click.
+  form.find("input[type=submit]").prop("disabled", true);
+
+  // Serialize the form fields into a valid card object.
+  var card = {
+    "name": form.find("[data-omise=holder_name]").val(),
+    "number": form.find("[data-omise=number]").val(),
+    "expiration_month": form.find("[data-omise=expiration_month]").val(),
+    "expiration_year": form.find("[data-omise=expiration_year]").val(),
+    "security_code": form.find("[data-omise=security_code]").val()
+  };
+
+  // Send a request to create a token then trigger the callback function once
+  // a response is received from Omise.
+  //
+  // Note that the response could be an error and this need to be handled within
+  // the callback.
+  Omise.createToken("card", card, function (statusCode, response) {
+    if (response.object == "error") {
+      // Display an error message.
+      $("#token_errors").html(response.message);
+
+      // Re-enable the submit button.
+      form.find("input[type=submit]").prop("disabled", false);
+    } else {
+      // Then fill the omise_token.
+      form.find("[name=omise_token]").val(response.id);
+
+      // And submit the form.
+      form.get(0).submit();
+    };
+  });
+
+  // Prevent the form from being submitted;
+  return false;
+
+});
+</script>
+</body>
+</html>
