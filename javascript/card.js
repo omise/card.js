@@ -8,11 +8,16 @@ $(".call-api-omise-card").click(function(){
 
     $(".wrapper-section-card").addClass('active');
     $("body").addClass('fix-scroll');
+
+    window.removeEventListener("message", listenToCardJsIframeMessage);
+    window.addEventListener("message", listenToCardJsIframeMessage, false);
 });
 
-$(".close-modal").click(function(){
-    $(".include-omise-card").removeClass('loading-content');
-    $("body").removeClass('fix-scroll');
-    alert("Hey");
-});
+function listenToCardJsIframeMessage(event){
+    if(event.data=="closePopup"){
+        $(".include-omise-card").removeClass('loading-content');
+        $("body").removeClass('fix-scroll');
+        $(".wrapper-section-card").removeClass('active');
+    }
+}
 

@@ -295,6 +295,7 @@
   </style>
 </head>
 <body>
+  <button class="close-modal">Close</button>
   <form action="" id="checkout" method="post">
     <div class="container-card-form">
       <section>
@@ -347,5 +348,10 @@
     </div>
   </form>
   <script src="javascript/jquery.js"></script>
+  <script>
+    $(".close-modal").click(function(){
+      parent.window.postMessage("closePopup", "*");
+    });
+  </script>
 </body>
 </html>
