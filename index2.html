@@ -1,0 +1,61 @@
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Card.js</title>
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <meta name="format-detection" content="telephone=no">
+  <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1.0, maximum-scale=1.0, target-densitydpi=device-dpi, user-scalable=no, minimal-ui">
+  <link href="stylesheets/bootstrap.css" rel="stylesheet" type="text/css" />
+  <link href="stylesheets/demo.css" rel="stylesheet" type="text/css" />
+  <link href="stylesheets/omise-card.css" rel="stylesheet" type="text/css" />
+</head>
+<body>
+  <div class="container-demo">
+    <section>
+      <header class="merchant-name">
+        <span class="logo-merchant"><img alt="" src="images/logo-merchant.png" /></span>
+        <h1 class="store-name">Merchant-name</h1>
+      </header>
+
+      <div class="checkout-card">
+        <div class="demo-content">
+          <p><img src="https://d13yacurqjgara.cloudfront.net/users/21049/screenshots/1552604/reissued_detail_1x.png" alt=""/></p>
+          <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
+          tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
+          quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
+          consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse
+          cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non
+          proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+        </div>
+        <form name="checkoutForm" method="POST">
+          <script type="text/javascript" src="javascript/card.js"
+            data-key="pkey_test_4y5y7zid01ik7n3w2sm"
+            data-image="logo-merchant.png"
+            data-name="Merchant site name"
+            data-description="Sample product ($10.25)"
+            data-amount="1025"
+          ></script>
+        </form>
+      </div>
+    </section>
+  </div>
+  <div class="wrapper-section-card">
+    <div class="include-omise-card">
+    </div>
+  </div>
+
+  <script src="javascript/jquery.js"></script>
+  <script src="https://cdn.omise.co/omise.js"></script>
+  <script>
+    Omise.setPublicKey("pkey_test_4xpip92iqmehclz4a4d");
+  </script>
+  <style>
+    .card-iframe {
+      width:100%;
+      height:100%;
+      border:none !important;
+    }
+  </style>
+</body>
+</html>

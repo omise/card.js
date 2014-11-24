@@ -329,8 +329,8 @@
       <section>
 
         <header class="merchant-name">
-          <span class="logo-merchant"><img alt="" src="images/logo-merchant.png"></span>
-          <h1 class="store-name">Merchant-name</h1>
+          <span class="logo-merchant"><img alt="" src="images/logo-merchant.png" id="merchantImage"></span>
+          <h1 class="store-name" id="merchantName"></h1>
         </header>
 
         <div class="checkout-card">
@@ -338,8 +338,10 @@
 
             <a class="close-modal" href="#">Close</a>
 
+            <div id="error"></div>
+
             <div class="input-data-checkout group-data">
-              <input id="full_name" type="text" x-autocompletetype="text" autocompletetype="text" autocorrect="off" spellcheck="off" autocapitalize="off" placeholder="Full Name" autofocus="">
+              <input id="cardholder_name" type="text" x-autocompletetype="text" autocompletetype="text" autocorrect="off" spellcheck="off" autocapitalize="off" placeholder="Full Name" autofocus="">
             </div>
 
 
@@ -352,28 +354,31 @@
 
               <div class="row mm-yy-cvc">
                 <div class="col-md-6 input-data-checkout">
-                  <input class="control" id="cc-exp" type="text" x-autocompletetype="off" autocompletetype="off" autocorrect="off" spellcheck="off" autocapitalize="off" placeholder="MM / YY">
+                  <input class="control" id="expiration_month" type="text" x-autocompletetype="off" autocompletetype="off" autocorrect="off" spellcheck="off" autocapitalize="off" placeholder="MM">
                 </div>
                 <div class="col-md-6 input-data-checkout">
-                  <input class="control" id="cc-csc" type="tel" autocomplete="off" autocorrect="off" spellcheck="off" autocapitalize="off" placeholder="CVC" maxlength="4">
+                  <input class="control" id="expiration_year" type="text" x-autocompletetype="off" autocompletetype="off" autocorrect="off" spellcheck="off" autocapitalize="off" placeholder="YY">
+                </div>
+                <div class="col-md-6 input-data-checkout">
+                  <input class="control" id="security_code" type="tel" autocomplete="off" autocorrect="off" spellcheck="off" autocapitalize="off" placeholder="CVC" maxlength="4">
                 </div>
               </div>
             </div>
 
 
             <div class="input-data-checkout">
-              <input id="" type="text" x-autocompletetype="text" autocompletetype="text" autocorrect="off" spellcheck="off" autocapitalize="off" placeholder="Postal code *option">
+              <input id="postal_code" type="text" x-autocompletetype="text" autocompletetype="text" autocorrect="off" spellcheck="off" autocapitalize="off" placeholder="Postal code *option">
             </div>
 
             <div class="input-data-checkout">
-              <input id="" type="text" x-autocompletetype="text" autocompletetype="text" autocorrect="off" spellcheck="off" autocapitalize="off" placeholder="City *option">
+              <input id="city" type="text" x-autocompletetype="text" autocompletetype="text" autocorrect="off" spellcheck="off" autocapitalize="off" placeholder="City *option">
             </div>
           </div>
 
           <p class="btn-omise-checkout">
-            <button type="submit">PAY now  ฿11,851.05</button>
+            <button type="submit" id="paynow">PAY now  <span id="checkoutDisplayAmount"></span></button>
           </p>
-
+          <input type="hidden" name="checkoutAmount" id="checkoutAmount" />
         </div>
       </section>
     </div>
@@ -385,15 +390,68 @@
     </a>
   </footer>
   <script src="javascript/jquery.js"></script>
+  <script src="https://cdn.omise.co/omise.js"></script>
   <script>
     window.onload = function() {
       setTimeout(function(){
         $("body").addClass('loading');
       },1000);
     };
+
     $(".close-modal").click(function(){
-      parent.window.postMessage("closePopup", "*");
+      parent.window.postMessage("closeOmiseCardJsPopup", "*");
     });
+
+    var submitButton = document.getElementById("paynow");
+    if(submitButton){
+      submitButton.addEventListener("click", function(event){
+        event.preventDefault();
+        var card = {
+                    "name": document.getElementById("cardholder_name").value,
+                    "number": document.getElementById("card_number").value,
+                    "expiration_month": document.getElementById("expiration_month").value,
+                    "expiration_year": document.getElementById("expiration_year").value,
+                    "security_code": document.getElementById("security_code").value,
+                    "postal_code": document.getElementById("postal_code").value,
+                    "city": document.getElementById("city").value
+                  };
+
+        Omise.createToken("card", card, function (statusCode, response) {
+          card = {};
+          document.getElementById("cardholder_name").value = "";
+          document.getElementById("card_number").value = "";
+          document.getElementById("expiration_month").value = "";
+          document.getElementById("expiration_year").value = "";
+          document.getElementById("security_code").value = "";
+          document.getElementById("postal_code").value = "";
+          document.getElementById("city").value= "";
+          
+          if (response.object == "error") {
+            document.getElementById("error").innerHTML = response.message;
+          } else {
+            parent.window.postMessage('{ "omiseToken": "' + response.id + '", "fullName": "' + response.card.name + '" }', "*");
+          };
+        });
+      });
+    }
+
+    window.removeEventListener("message", listenToParentWindowMessage);
+    window.addEventListener("message", listenToParentWindowMessage, false);
+
+    function listenToParentWindowMessage(event){
+      if(event.data){
+        var json = JSON.parse(event.data);
+        document.getElementById("checkoutDisplayAmount").innerHTML = json.amount;
+        document.getElementById("checkoutAmount").value = json.amount;
+        document.getElementById("merchantName").innerHTML = json.merchantName;
+        document.getElementById("merchantImage").src = json.image;
+
+        if(Omise){
+          //set Omise JS publishable key
+          Omise.setPublicKey(json.key);
+        }
+      }
+    }
   </script>
 </body>
 </html>
