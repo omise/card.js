@@ -1,5 +1,5 @@
 (function(){
-    var omiseTokenHiddenField, omiseFullNameHiddenField, iframe;
+    var omiseTokenHiddenField, omiseFullNameHiddenField, iframe, iframeWrapper, formObject;
     var scriptElement = getScriptElement();
     var scriptParent = getScriptParent();
 
@@ -36,32 +36,35 @@
         iframe = document.createElement("IFRAME");
         iframe.id = "OmiseCardJsIFrame";
         iframe.src = "card.html";
-        iframe.style.visibility = "hidden";
-        iframe.style.zIndex= "9999"
-        iframe.style.position = "absolute";
-        iframe.style.top = "0px";
-        iframe.style.left = "0px";
         iframe.style.width = "100%";
         iframe.style.height = "100%";
-        iframe.style.overflowX = "hidden";
-        iframe.style.opacity = "0";
         iframe.style.border = "none";
-        iframe.style.backgroundColor = 'rgba(' + [0,0,0,0.6].join(',') + ')';
-        iframe.style.setProperty("-webkit-user-select", "none");
-        iframe.style.setProperty("-moz-user-select", "none");
-        iframe.style.setProperty("-ms-user-select", "none");
-        iframe.style.setProperty("-o-user-select", "none");
-        iframe.style.setProperty("user-select", "none");
-        iframe.style.setProperty("-webkit-perspective", "800");
+        iframe.style.opacity = "0";
         iframe.style.setProperty("-webkit-transition", "200ms opacity ease, -webkit-transform 200ms");
-        iframe.style.setProperty("-moz-transition", "200ms opacity ease");
-        iframe.style.setProperty("-ms-transition", "200ms opacity ease");
-        iframe.style.setProperty("-o-transition", "200ms opacity ease");
+        iframe.style.setProperty("-moz-transition", "200ms opacity ease, -moz-transform 200ms");
+        iframe.style.setProperty("-ms-transition", "200ms opacity ease, -ms-transform 200ms");
+        iframe.style.setProperty("-o-transition", "200ms opacity ease, -o-transform 200ms");
         iframe.style.setProperty("transition", "200ms opacity ease, transform 200ms");
         iframe.style.webkitTransform= "scale(0.1)";
 
         iframe.addEventListener("load", iframeLoaded);
-        document.body.appendChild(iframe);
+
+        iframeWrapper = document.createElement("DIV");
+        iframeWrapper.style.backgroundColor = 'rgba(' + [0,0,0,0.6].join(',') + ')';
+        iframeWrapper.style.visibility = "hidden";
+        iframeWrapper.style.zIndex= "9990"
+        iframeWrapper.style.position = "fixed";
+        iframeWrapper.style.top = "0px";
+        iframeWrapper.style.left = "0px";
+        iframeWrapper.style.width = "100%";
+        iframeWrapper.style.height = "100%";
+        iframeWrapper.style.overflowX = "hidden";
+        iframeWrapper.style.opacity = "0";
+        iframeWrapper.style.border = "none";
+        iframeWrapper.style.backgroundColor = 'rgba(' + [0,0,0,0.6].join(',') + ')';
+        iframeWrapper.appendChild(iframe);
+
+        document.body.appendChild(iframeWrapper);
 
         function iframeLoaded(event){
             if(event.currentTarget){
@@ -69,7 +72,6 @@
                     "merchantName": merchantName,
                     "key": key,
                     "image": image,
-                    "description": description,
                     "amount": amount
                     };
 
@@ -91,6 +93,10 @@
         if(scriptParent){
             scriptParent.appendChild(omiseTokenHiddenField);
             scriptParent.appendChild(omiseFullNameHiddenField);
+        }
+
+        if(omiseFullNameHiddenField.form){
+            formObject = omiseFullNameHiddenField.form;
         }
     }
 
@@ -115,11 +121,15 @@
         button.style.width = "300px";
         button.addEventListener("click", function(event){
             event.preventDefault();
-            if(iframe){
-                iframe.style.opacity = "1";
-                iframe.style.visibility = "visible";
-                iframe.style.webkitTransform= "scale(1)";
+            if(iframeWrapper && iframe){
+                iframeWrapper.style.opacity = "1";
+                iframeWrapper.style.visibility = "visible";
                 document.body.style.overflow = "hidden";
+
+                setTimeout(function(){
+                    iframe.style.webkitTransform= "scale(1)";
+                    iframe.style.opacity = "1";
+                }, 300);
             }else{
                 console.log("error: Unable to find CardJS iframe");
             }
@@ -132,9 +142,10 @@
 
     function listenToCardJsIframeMessage(event){
         if(event.data=="closeOmiseCardJsPopup"){
-            if(iframe){
+            if(iframeWrapper && iframe){
+                iframeWrapper.style.opacity = "0";
+                iframeWrapper.style.visibility = "hidden";
                 iframe.style.opacity = "0";
-                iframe.style.visibility = "hidden";
                 iframe.style.webkitTransform= "scale(0.1)";
                 document.body.style.overflow = "";
             }
@@ -142,11 +153,16 @@
             var result = JSON.parse(event.data);
             omiseTokenHiddenField.value = result.omiseToken;
             omiseFullNameHiddenField.value = result.fullName;
-            if(iframe){
+            if(iframeWrapper && iframe){
+                iframeWrapper.style.opacity = "0";
+                iframeWrapper.style.visibility = "hidden";
                 iframe.style.opacity = "0";
-                iframe.style.visibility = "hidden";
                 iframe.style.webkitTransform= "scale(0.1)";
                 document.body.style.overflow = "";
+            }
+
+            if(formObject){
+                formObject.submit();
             }
         }
     }
