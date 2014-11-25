@@ -1,5 +1,5 @@
 (function(){
-    var omiseTokenHiddenField, omiseFullNameHiddenField, iframe, iframeWrapper, formObject;
+    var omiseTokenHiddenField, iframe, iframeWrapper, formObject;
     var scriptElement = getScriptElement();
     var scriptParent = getScriptParent();
 
@@ -24,12 +24,11 @@
     }
 
     function createIframe(){
-        var merchantName, key, image, description, amount;
+        var merchantName, key, image, amount;
         if(scriptElement){
             merchantName = scriptElement.dataset.name;
             key = scriptElement.dataset.key;
             image = scriptElement.dataset.image;
-            description = scriptElement.dataset.description;
             amount = scriptElement.dataset.amount;
         }
 
@@ -82,21 +81,15 @@
 
     function createHiddenFields(){
         omiseTokenHiddenField = document.createElement('INPUT');
-        omiseFullNameHiddenField = document.createElement('INPUT');
-
         omiseTokenHiddenField.type="hidden";
         omiseTokenHiddenField.name="omiseToken";
 
-        omiseFullNameHiddenField.type="hidden";
-        omiseFullNameHiddenField.name="omiseFullName";
-
         if(scriptParent){
             scriptParent.appendChild(omiseTokenHiddenField);
-            scriptParent.appendChild(omiseFullNameHiddenField);
         }
 
-        if(omiseFullNameHiddenField.form){
-            formObject = omiseFullNameHiddenField.form;
+        if(omiseTokenHiddenField.form){
+            formObject = omiseTokenHiddenField.form;
         }
     }
 
@@ -140,26 +133,23 @@
         }
     }
 
+    function hideIframe(){
+        if(iframeWrapper && iframe){
+            iframeWrapper.style.opacity = "0";
+            iframeWrapper.style.visibility = "hidden";
+            iframe.style.opacity = "0";
+            iframe.style.webkitTransform= "scale(0.1)";
+            document.body.style.overflow = "";
+        }
+    }
+
     function listenToCardJsIframeMessage(event){
         if(event.data=="closeOmiseCardJsPopup"){
-            if(iframeWrapper && iframe){
-                iframeWrapper.style.opacity = "0";
-                iframeWrapper.style.visibility = "hidden";
-                iframe.style.opacity = "0";
-                iframe.style.webkitTransform= "scale(0.1)";
-                document.body.style.overflow = "";
-            }
+            hideIframe();
         }else{
             var result = JSON.parse(event.data);
             omiseTokenHiddenField.value = result.omiseToken;
-            omiseFullNameHiddenField.value = result.fullName;
-            if(iframeWrapper && iframe){
-                iframeWrapper.style.opacity = "0";
-                iframeWrapper.style.visibility = "hidden";
-                iframe.style.opacity = "0";
-                iframe.style.webkitTransform= "scale(0.1)";
-                document.body.style.overflow = "";
-            }
+            hideIframe();
 
             if(formObject){
                 formObject.submit();

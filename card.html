@@ -338,7 +338,7 @@
             <div id="errorMessage"></div>
 
             <div class="input-data-checkout group-data">
-              <input id="cardholder_name" type="text" x-autocompletetype="text" autocompletetype="text" autocorrect="off" spellcheck="off" autocapitalize="off" placeholder="Full Name" autofocus="">
+              <input id="cardholder_name" type="text" x-autocompletetype="text" autocompletetype="text" autocorrect="off" spellcheck="off" autocapitalize="off" placeholder="Card Holder's Name" autofocus="">
             </div>
 
 
@@ -395,7 +395,7 @@
     var securityCodeInput = $("#security_code");
     var postalCodeInput = $("#postal_code");
     var cityInput = $("#city");
-    var error = $("#errorMessage");
+    var errorMessage = $("#errorMessage");
 
     function validateInput(input){
       if($(input).val().length == 0){
@@ -416,7 +416,7 @@
       securityCodeInput.val('').removeClass('error');
       postalCodeInput.val('').removeClass('error');
       cityInput.val('').removeClass('error');
-      error.html('');
+      errorMessage.html('');
     }
 
     function validateForm(){
@@ -479,9 +479,9 @@
         resetForm();
 
         if (response.object == "error") {
-          error.html(response.message);
+          errorMessage.html(response.message);
         } else {
-          parent.window.postMessage('{ "omiseToken": "' + response.id + '", "fullName": "' + response.card.name + '" }', "*");
+          parent.window.postMessage('{ "omiseToken": "' + response.id + '" }', "*");
         };
       });
     });
