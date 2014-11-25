@@ -1,4 +1,15 @@
 (function(){
+    var omiseTokenHiddenField, omiseFullNameHiddenField, iframe;
+    var scriptElement = getScriptElement();
+    var scriptParent = getScriptParent();
+
+    createIframe();
+    renderPayNowButton();
+    createHiddenFields();
+
+    window.removeEventListener("message", listenToCardJsIframeMessage);
+    window.addEventListener("message", listenToCardJsIframeMessage, false);
+
     function getScriptElement(){
         var target = document.documentElement;
         while (target.childNodes.length && target.lastChild.nodeType == 1) {
@@ -34,6 +45,7 @@
         iframe.style.height = "100%";
         iframe.style.overflowX = "hidden";
         iframe.style.opacity = "0";
+        iframe.style.border = "none";
         iframe.style.backgroundColor = 'rgba(' + [0,0,0,0.6].join(',') + ')';
         iframe.style.setProperty("-webkit-user-select", "none");
         iframe.style.setProperty("-moz-user-select", "none");
@@ -41,18 +53,18 @@
         iframe.style.setProperty("-o-user-select", "none");
         iframe.style.setProperty("user-select", "none");
         iframe.style.setProperty("-webkit-perspective", "800");
-        iframe.style.setProperty("-webkit-transition", "200ms opacity ease");
+        iframe.style.setProperty("-webkit-transition", "200ms opacity ease, -webkit-transform 200ms");
         iframe.style.setProperty("-moz-transition", "200ms opacity ease");
         iframe.style.setProperty("-ms-transition", "200ms opacity ease");
         iframe.style.setProperty("-o-transition", "200ms opacity ease");
-        iframe.style.setProperty("transition", "200ms opacity ease");
+        iframe.style.setProperty("transition", "200ms opacity ease, transform 200ms");
         iframe.style.webkitTransform= "scale(0.1)";
 
         iframe.addEventListener("load", iframeLoaded);
+        document.body.appendChild(iframe);
 
         function iframeLoaded(event){
-            var iframe = event.currentTarget;
-            if(iframe){
+            if(event.currentTarget){
                 var json = {
                     "merchantName": merchantName,
                     "key": key,
@@ -61,11 +73,9 @@
                     "amount": amount
                     };
 
-                iframe.contentWindow.postMessage(JSON.stringify(json), "*");
+                event.currentTarget.contentWindow.postMessage(JSON.stringify(json), "*");
             }
         }
-
-        document.body.appendChild(iframe);
     }
 
     function createHiddenFields(){
@@ -91,6 +101,18 @@
     function renderPayNowButton(){
         var button = document.createElement("BUTTON");
         button.innerHTML = "PAY NOW";
+        button.style.backgroundImage = "-webkit-linear-gradient( 90deg, rgb(35,166,213) 0%, rgb(34,214,214) 100%)";
+        button.style.border = "none";
+        button.style.borderRadius = "5px";
+        button.style.height = "60px";
+        button.style.display = "block";
+        button.style.color = "#FFF";
+        button.style.lineHeight = "60px";
+        button.style.textAlign = "center";
+        button.style.fontWeight = "bold";
+        button.style.fontSize = "18px";
+        button.style.position = "relative";
+        button.style.width = "300px";
         button.addEventListener("click", function(event){
             event.preventDefault();
             if(iframe){
@@ -113,6 +135,7 @@
             if(iframe){
                 iframe.style.opacity = "0";
                 iframe.style.visibility = "hidden";
+                iframe.style.webkitTransform= "scale(0.1)";
                 document.body.style.overflow = "";
             }
         }else{
@@ -120,21 +143,13 @@
             omiseTokenHiddenField.value = result.omiseToken;
             omiseFullNameHiddenField.value = result.fullName;
             if(iframe){
+                iframe.style.opacity = "0";
                 iframe.style.visibility = "hidden";
+                iframe.style.webkitTransform= "scale(0.1)";
                 document.body.style.overflow = "";
             }
         }
     }
-
-    var omiseTokenHiddenField, omiseFullNameHiddenField, iframe;
-    var scriptElement = getScriptElement();
-    var scriptParent = getScriptParent();
-
-    createIframe();
-    renderPayNowButton();
-    createHiddenFields();
-    window.removeEventListener("message", listenToCardJsIframeMessage);
-    window.addEventListener("message", listenToCardJsIframeMessage, false);
 })();
 
 
