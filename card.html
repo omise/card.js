@@ -396,6 +396,7 @@
     var postalCodeInput = $("#postal_code");
     var cityInput = $("#city");
     var errorMessage = $("#errorMessage");
+    var clientWindowDomain;
 
     function validateInput(input){
       if($(input).val().length == 0){
@@ -481,7 +482,7 @@
         if (response.object == "error") {
           errorMessage.html(response.message);
         } else {
-          parent.window.postMessage('{ "omiseToken": "' + response.id + '" }', "*");
+          parent.window.postMessage('{ "omiseToken": "' + response.id + '" }', clientWindowDomain);
         };
       });
     });
@@ -495,9 +496,11 @@
         $("#checkoutDisplayAmount").html(json.amount/100);
         $("#merchantName").html(json.merchantName);
         $("#merchantImage").attr("src", json.image);
+        clientWindowDomain = event.origin;
 
         if(Omise){
           //set Omise JS publishable key
+          //Omise.defaultHost = "vault-staging.omise.co";
           Omise.setPublicKey(json.key);
         }
       }

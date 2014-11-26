@@ -2,12 +2,13 @@
     var omiseTokenHiddenField, iframe, iframeWrapper, formObject;
     var scriptElement = getScriptElement();
     var scriptParent = getScriptParent();
+    var serverOrigin = "https://omise-cdn.s3.amazonaws.com";
 
     createIframe();
     renderPayNowButton();
     createHiddenFields();
 
-    window.removeEventListener("message", listenToCardJsIframeMessage);
+    window.removeEventListener("message", listenToCardJsIframeMessage);         
     window.addEventListener("message", listenToCardJsIframeMessage, false);
 
     function getScriptElement(){
@@ -34,7 +35,7 @@
 
         iframe = document.createElement("IFRAME");
         iframe.id = "OmiseCardJsIFrame";
-        iframe.src = "card.html";
+        iframe.src = serverOrigin + "/card/index.html";
         iframe.style.width = "100%";
         iframe.style.height = "100%";
         iframe.style.border = "none";
@@ -45,6 +46,10 @@
         iframe.style.setProperty("-o-transition", "200ms opacity ease, -o-transform 200ms");
         iframe.style.setProperty("transition", "200ms opacity ease, transform 200ms");
         iframe.style.webkitTransform= "scale(0.1)";
+        iframe.style.MozTransform = "scale(0.1)";
+        iframe.style.msTransform = "scale(0.1)";
+        iframe.style.OTransform = "scale(0.1)";
+        iframe.style.transform = "scale(0.1)";
 
         iframe.addEventListener("load", iframeLoaded);
 
@@ -74,7 +79,7 @@
                     "amount": amount
                     };
 
-                event.currentTarget.contentWindow.postMessage(JSON.stringify(json), "*");
+                event.currentTarget.contentWindow.postMessage(JSON.stringify(json), serverOrigin);
             }
         }
     }
@@ -100,18 +105,6 @@
     function renderPayNowButton(){
         var button = document.createElement("BUTTON");
         button.innerHTML = "PAY NOW";
-        button.style.backgroundImage = "-webkit-linear-gradient( 90deg, rgb(35,166,213) 0%, rgb(34,214,214) 100%)";
-        button.style.border = "none";
-        button.style.borderRadius = "5px";
-        button.style.height = "60px";
-        button.style.display = "block";
-        button.style.color = "#FFF";
-        button.style.lineHeight = "60px";
-        button.style.textAlign = "center";
-        button.style.fontWeight = "bold";
-        button.style.fontSize = "18px";
-        button.style.position = "relative";
-        button.style.width = "300px";
         button.addEventListener("click", function(event){
             event.preventDefault();
             if(iframeWrapper && iframe){
@@ -121,6 +114,10 @@
 
                 setTimeout(function(){
                     iframe.style.webkitTransform= "scale(1)";
+                    iframe.style.MozTransform = "scale(1)";
+                    iframe.style.msTransform = "scale(1)";
+                    iframe.style.OTransform = "scale(1)";
+                    iframe.style.transform = "scale(1)";
                     iframe.style.opacity = "1";
                 }, 300);
             }else{
@@ -139,20 +136,36 @@
             iframeWrapper.style.visibility = "hidden";
             iframe.style.opacity = "0";
             iframe.style.webkitTransform= "scale(0.1)";
+            iframe.style.MozTransform = "scale(0.1)";
+            iframe.style.msTransform = "scale(0.1)";
+            iframe.style.OTransform = "scale(0.1)";
+            iframe.style.transform = "scale(0.1)";
             document.body.style.overflow = "";
         }
     }
 
     function listenToCardJsIframeMessage(event){
+        if(!event.origin)
+            return;
+
+        if(event.origin !== serverOrigin){
+            return;
+        }
+
         if(event.data=="closeOmiseCardJsPopup"){
             hideIframe();
         }else{
-            var result = JSON.parse(event.data);
-            omiseTokenHiddenField.value = result.omiseToken;
-            hideIframe();
+            try{
+                var result = JSON.parse(event.data);
+                omiseTokenHiddenField.value = result.omiseToken;
+                hideIframe();
 
-            if(formObject){
-                formObject.submit();
+                if(formObject){
+                    formObject.submit();
+                }
+            }
+            catch(e){
+                hideIframe();
             }
         }
     }
