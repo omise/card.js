@@ -33,5 +33,5 @@ Note that the data-amount attribute requires the amount to be paid in Satangs (1
 How it works
 ------------
 
-Card.js will render a "Pay out" button which when a user click at the payout button, a popup window with a credit card form will be displayed. The user will then fill out the credit card information and submit. If success, the popup will be closed and your form will be automatically submit to your server. Otherwise there will be the error information shown.
+Card.js will render a "Pay now" button which when a user click at the payout button, a popup window with a credit card form will be displayed. The user will then fill out the credit card information and submit. If success, the popup will be closed and your form will be automatically submit to your server. Otherwise there will be the error information shown.
 

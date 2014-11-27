@@ -1,4 +1,5 @@
-(function($){
+(function (window, $, undefined) {
+
   var cardholderNameInput = $("#cardholder_name");
   var cardNumberInput = $("#card_number")
   var expirationMonthInput = $("#expiration_month");
@@ -9,17 +10,17 @@
   var errorMessage = $("#errorMessage");
   var clientWindowDomain;
 
-  function validateInput(input){
-    if($(input).val().length == 0){
+  function validateInput(input) {
+    if ($(input).val().length == 0) {
       $(input).addClass("error");
       return 1;
-    }else{
+    } else {
       $(input).removeClass("error");
       return 0;
     }
-  }
+  };
 
-  function resetForm(){
+  function resetForm() {
     card = {};
     cardholderNameInput.val('').removeClass('error');
     cardNumberInput.val('').removeClass('error');
@@ -29,7 +30,7 @@
     postalCodeInput.val('').removeClass('error');
     cityInput.val('').removeClass('error');
     errorMessage.html('');
-  }
+  };
 
   function validateForm(){
     var error = validateInput(cardholderNameInput);
@@ -38,44 +39,44 @@
     error += validateInput(expirationYearInput);
     error += validateInput(securityCodeInput);
 
-    if(error>0){
+    if (error > 0) {
       return false;
-    }else{
+    } else {
       return true;
     }
-  }
+  };
 
-  cardholderNameInput.keyup(function(event){
+  cardholderNameInput.keyup(function (event) {
     validateInput(this);
-  })
+  });
 
-  cardNumberInput.keyup(function(event){
+  cardNumberInput.keyup(function (event) {
     validateInput(this);
-  })
+  });
 
-  expirationMonthInput.keyup(function(event){
+  expirationMonthInput.keyup(function (event) {
     validateInput(this);
-  })
+  });
 
-  expirationYearInput.keyup(function(event){
+  expirationYearInput.keyup(function (event) {
     validateInput(this);
-  })
+  });
 
-  securityCodeInput.keyup(function(event){
+  securityCodeInput.keyup(function (event) {
     validateInput(this);
-  })
+  });
 
-  $(".close-modal").click(function(){
+  $(".close-modal").click(function () {
     resetForm();
     parent.window.postMessage("closeOmiseCardJsPopup", "*");
   });
 
-  $("#paynow").click(function(e){
+  $("#paynow").click(function (e) {
     e.preventDefault();
     var formIsValid = validateForm();
-    if(!formIsValid){
+    if (!formIsValid) {
       return;
-    }
+    };
 
     var card = {
       "name": cardholderNameInput.val(),
@@ -89,6 +90,9 @@
 
     Omise.createToken("card", card, function (statusCode, response) {
       resetForm();
+      if(statusCode == "0" && response===undefined){
+        errorMessage.html("Authentication failed.");
+      }
 
       if (response.object == "error") {
         errorMessage.html(response.message);
@@ -102,18 +106,18 @@
   window.addEventListener("message", listenToParentWindowMessage, false);
 
   function listenToParentWindowMessage(event){
-    if(event.data){
+    if (event.data) {
       var json = JSON.parse(event.data);
       $("#checkoutDisplayAmount").html(json.amount/100);
       $("#merchantName").html(json.merchantName);
       $("#merchantImage").attr("src", json.image);
       clientWindowDomain = event.origin;
 
-      if(Omise){
-          //set Omise JS publishable key
-          Omise.config.defaultHost = "vault-staging.omise.co";
-          Omise.setPublicKey(json.key);
-        }
-      }
-    }
-  })(jQuery)
+      if (Omise) {
+        Omise.config.defaultHost = "vault-staging.omise.co";
+        Omise.setPublicKey(json.key);
+      };
+    };
+  };
+
+})(window, jQuery);
