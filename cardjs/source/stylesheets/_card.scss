@@ -3,15 +3,12 @@
   -moz-box-sizing: border-box;
   box-sizing: border-box;
 }
+
 body {
-  font-family: 'Open Sans',Helvetica,Arial,sans-serif;
+  font-family: 'LatoRegular', Helvetica, Arial, sans-serif;
   font-size:1em;
   font-weight:normal;
   background:transparent;
-}
-* {
-  margin:0;
-  padding:0;
 }
 .container-card-form {
   width: 300px;
@@ -96,9 +93,8 @@ img {
   min-height: 100%;
 }
 .btn-omise-checkout {
-  background-image: -moz-linear-gradient( 90deg, rgb(35,166,213) 0%, rgb(34,214,214) 100%);
-  background-image: -webkit-linear-gradient( 90deg, rgb(35,166,213) 0%, rgb(34,214,214) 100%);
-  background-image: -ms-linear-gradient( 90deg, rgb(35,166,213) 0%, rgb(34,214,214) 100%);
+  background: rgb(35,166,213);
+  background: linear-gradient( to right, rgb(35,166,213) 0%, rgb(34,214,214) 100%) no-repeat;
   border:none;
   border-radius: 5px;
   height: 60px;
