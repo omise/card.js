@@ -3,7 +3,7 @@
   var omiseTokenHiddenField, iframe, iframeWrapper, formObject;
   var scriptElement = getScriptElement();
   var scriptParent = getScriptParent();
-  var serverOrigin = "https://omise-cdn.s3.amazonaws.com";
+  var serverOrigin = "http://localhost:8088";
 
   createIframe();
   renderPayNowButton();
@@ -37,7 +37,7 @@
 
     iframe = document.createElement("IFRAME");
     iframe.id = "OmiseCardJsIFrame";
-    iframe.src = serverOrigin + "/card/index.html";
+    iframe.src = serverOrigin + "/index.html";
     iframe.style.width = "100%";
     iframe.style.height = "100%";
     iframe.style.border = "none";
