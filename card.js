@@ -27,10 +27,10 @@
     function createIframe(){
         var merchantName, key, image, amount;
         if(scriptElement){
-            merchantName = scriptElement.dataset.name;
-            key = scriptElement.dataset.key;
-            image = scriptElement.dataset.image;
-            amount = scriptElement.dataset.amount;
+            merchantName = scriptElement.getAttribute("data-name");
+            key = scriptElement.getAttribute("data-key");
+            image = scriptElement.getAttribute("data-image");
+            amount = scriptElement.getAttribute("data-amount");
         }
 
         iframe = document.createElement("IFRAME");
