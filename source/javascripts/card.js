@@ -3,7 +3,7 @@
   var omiseTokenHiddenField, iframe, iframeWrapper, formObject;
   var scriptElement = getScriptElement();
   var scriptParent = getScriptParent();
-  var serverOrigin = "http://localhost:4569";
+  var serverOrigin = "http://localhost:4568";
 
   renderPayNowButton();
   createHiddenFields();
