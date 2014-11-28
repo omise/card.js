@@ -19,9 +19,9 @@ Include the card.js from Omise CDN to your checkout form as below
 <form name="checkoutForm" method="POST" action="test.html">
     <script type="text/javascript" src="https://omise-cdn.s3.amazonaws.com/card.js"
       data-key="YOUR_PUBLIC_KEY"
-      data-image="PATH_TO_LOGO_IMAGE"
-      data-name="Merchant site name"
-      data-amount="10025">
+      data-amount="10025"
+      data-currency="thb"
+      data-frame-label="Merchant site name">
     </script>
 </form>
 </body>
