@@ -5,7 +5,6 @@
   var scriptParent = getScriptParent();
   var serverOrigin = "http://localhost:4569";
 
-  createIframe();
   renderPayNowButton();
   createHiddenFields();
 
@@ -33,6 +32,7 @@
       image = scriptElement.getAttribute("data-image");
       amount = scriptElement.getAttribute("data-amount");
       currency = scriptElement.getAttribute("data-currency");
+      locationFields = scriptElement.getAttribute("data-location");
     };
 
     iframe = document.createElement("IFRAME");
@@ -41,6 +41,7 @@
     iframe.style.width = "100%";
     iframe.style.height = "100%";
     iframe.style.border = "none";
+    iframe.style.margin = "0";
     iframe.style.opacity = "0";
     iframe.style.setProperty("-webkit-transition", "200ms opacity ease, -webkit-transform 200ms");
     iframe.style.setProperty("-moz-transition", "200ms opacity ease, -moz-transform 200ms");
@@ -79,7 +80,8 @@
           "key": key,
           "image": image,
           "amount": amount,
-          "currency": currency
+          "currency": currency,
+          "location": locationFields
         };
 
         event.currentTarget.contentWindow.postMessage(JSON.stringify(data), serverOrigin);
@@ -101,15 +103,12 @@
     };
   };
 
-  function getIframe() {
-    return document.getElementById("OmiseCardJsIFrame");
-  };
-
   function renderPayNowButton() {
     var button = document.createElement("BUTTON");
     button.innerHTML = "PAY NOW";
     button.addEventListener("click", function (event) {
       event.preventDefault();
+      createIframe();
       if (iframeWrapper && iframe) {
         iframeWrapper.style.opacity = "1";
         iframeWrapper.style.visibility = "visible";
@@ -156,7 +155,7 @@
       return;
     };
 
-    if (event.data=="closeOmiseCardJsPopup") {
+    if (event.data == "closeOmiseCardJsPopup") {
       hideIframe();
     } else {
 
