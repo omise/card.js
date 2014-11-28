@@ -1,6 +1,7 @@
 Card.js
 =======
 
+[Read the full documentation](https://docs.omise.co/card-js/)
 
 Getting started
 ---------------
