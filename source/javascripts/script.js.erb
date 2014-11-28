@@ -1,5 +1,7 @@
 (function (window, $, undefined) {
 
+  "use strict";
+
   var cardholderNameInput = $("#cardholder_name");
   var cardNumberInput = $("#card_number")
   var expirationMonthInput = $("#expiration_month");
@@ -9,6 +11,16 @@
   var cityInput = $("#city");
   var errorMessage = $("#error_message");
   var clientWindowDomain;
+
+  function formatMoney(n, c, d, t) {
+    var c = isNaN(c = Math.abs(c)) ? 2 : c, 
+        d = d == undefined ? "." : d, 
+        t = t == undefined ? "," : t, 
+        s = n < 0 ? "-" : "", 
+        i = parseInt(n = Math.abs(+n || 0).toFixed(c)) + "", 
+        j = (j = i.length) > 3 ? j % 3 : 0;
+    return s + (j ? i.substr(0, j) + t : "") + i.substr(j).replace(/(\d{3})(?=\d)/g, "$1" + t) + (c ? d + Math.abs(n - i).toFixed(c).slice(2) : "");
+  };
 
   function validateInput(input) {
     if ($(input).val().length == 0) {
@@ -21,7 +33,6 @@
   };
 
   function resetForm() {
-    card = {};
     cardholderNameInput.val('').removeClass('error');
     cardNumberInput.val('').removeClass('error');
     expirationMonthInput.val('').removeClass('error');
@@ -110,14 +121,35 @@
   function listenToParentWindowMessage(event) {
     if (event.data) {
       var data = JSON.parse(event.data);
-      if (data.location) { $("#location_fields").show(); };
-      $("#amount").html(data.amount/100);
-      $("#merchant_name").html(data.merchantName);
-      $("#merchant_image").attr("src", data.image);
+
+      if (data.location) {
+        $("#location_fields").show();
+      };
+
+      $("#amount").html(formatMoney(parseInt(data.amount)/100));
+
+      if (data.frameLabel) {
+        $("#merchant_name").html(data.frameLabel);
+      } else {
+        $("#merchant_name").html("Enter your card details");
+      }
+
+      if (data.image) {
+        $("#merchant_image").attr("src", data.image);
+      } else {
+        $("#merchant_image").parent().hide();
+      }
+
+      if (data.submitLabel) {
+        $("#submit_label").html(data.submitLabel);
+      }
+
       clientWindowDomain = event.origin;
 
       if (Omise) {
-        Omise.config.defaultHost = "vault-staging.omise.co";
+        <% if development? %>
+          Omise.config.defaultHost = "vault-staging.omise.co";
+        <% end %>
         Omise.setPublicKey(data.key);
       };
     };

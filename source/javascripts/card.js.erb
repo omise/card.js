@@ -1,9 +1,11 @@
 (function (window, undefined) {
 
+  "use strict";
+
   var omiseTokenHiddenField, iframe, iframeWrapper, formObject;
   var scriptElement = getScriptElement();
   var scriptParent = getScriptParent();
-  var serverOrigin = "http://localhost:4568";
+  var serverOrigin = "<%= config[:omise_card_url] %>";
 
   renderPayNowButton();
   createHiddenFields();
@@ -25,9 +27,10 @@
   }
 
   function createIframe() {
-    var merchantName, key, image, amount, currency;
+    var frameLabel, submitLabel, key, image, amount, currency, locationFields;
     if (scriptElement) {
-      merchantName = scriptElement.getAttribute("data-name");
+      frameLabel = scriptElement.getAttribute("data-frame-label");
+      submitLabel = scriptElement.getAttribute("data-submit-label");
       key = scriptElement.getAttribute("data-key");
       image = scriptElement.getAttribute("data-image");
       amount = scriptElement.getAttribute("data-amount");
@@ -57,7 +60,7 @@
     iframe.addEventListener("load", iframeLoaded);
 
     iframeWrapper = document.createElement("DIV");
-    iframeWrapper.style.backgroundColor = 'rgba(' + [0,0,0,0.6].join(',') + ')';
+    iframeWrapper.style.backgroundColor = 'rgba(' + [0,0,0,0.88].join(',') + ')';
     iframeWrapper.style.visibility = "hidden";
     iframeWrapper.style.zIndex= "9990"
     iframeWrapper.style.position = "fixed";
@@ -68,7 +71,6 @@
     iframeWrapper.style.overflowX = "hidden";
     iframeWrapper.style.opacity = "0";
     iframeWrapper.style.border = "none";
-    iframeWrapper.style.backgroundColor = 'rgba(' + [0,0,0,0.6].join(',') + ')';
     iframeWrapper.appendChild(iframe);
 
     document.body.appendChild(iframeWrapper);
@@ -76,7 +78,8 @@
     function iframeLoaded(event) {
       if (event.currentTarget) {
         var data = {
-          "merchantName": merchantName,
+          "frameLabel": frameLabel,
+          "submitLabel": submitLabel,
           "key": key,
           "image": image,
           "amount": amount,
@@ -104,8 +107,12 @@
   };
 
   function renderPayNowButton() {
-    var button = document.createElement("BUTTON");
-    button.innerHTML = "PAY NOW";
+    var button, buttonLabel;
+    button = document.createElement("BUTTON");
+    if (scriptElement) {
+      buttonLabel = scriptElement.getAttribute("data-button-label");
+    }
+    button.innerHTML = buttonLabel || "Pay now";
     button.addEventListener("click", function (event) {
       event.preventDefault();
       createIframe();
@@ -147,6 +154,7 @@
   };
 
   function listenToCardJsIframeMessage(event) {
+    console.log(event);
     if (!event.origin) {
       return;
     };
