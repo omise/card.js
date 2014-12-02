@@ -112,14 +112,22 @@
     if (scriptElement) {
       buttonLabel = scriptElement.getAttribute("data-button-label");
     }
+
     button.innerHTML = buttonLabel || "Pay now";
     button.addEventListener("click", function (event) {
       event.preventDefault();
-      createIframe();
+      if(!iframeWrapper){
+        createIframe();
+      }
+
       if (iframeWrapper && iframe) {
         iframeWrapper.style.opacity = "1";
         iframeWrapper.style.visibility = "visible";
         document.body.style.overflow = "hidden";
+        
+        if(formObject){
+          formObject.active = true;
+        }
 
         setTimeout(function(){
           iframe.style.webkitTransform= "scale(1)";
@@ -133,11 +141,11 @@
         console.log("error: Unable to find CardJS iframe");
       };
     });
-    
+
     if (scriptParent) {
       scriptParent.appendChild(button);
-    };
-  };
+    }
+  }
 
   function hideIframe() {
     if (iframeWrapper && iframe) {
@@ -151,10 +159,13 @@
       iframe.style.transform = "scale(0.1)";
       document.body.style.overflow = "";
     };
+
+    if(formObject){
+      formObject.active = undefined;
+    }
   };
 
   function listenToCardJsIframeMessage(event) {
-    console.log(event);
     if (!event.origin) {
       return;
     };
@@ -168,11 +179,10 @@
     } else {
 
       try {
-        var result = JSON.parse(event.data);
-        omiseTokenHiddenField.value = result.omiseToken;
-        hideIframe();
-
-        if (formObject) {
+        if (formObject && formObject.active) {
+          var result = JSON.parse(event.data);
+          omiseTokenHiddenField.value = result.omiseToken;
+          hideIframe();
           formObject.submit();
         };
       }
