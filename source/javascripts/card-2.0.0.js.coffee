@@ -238,7 +238,9 @@ class OmiseCard
   # @return {void}
   ###
   attach: ->
-    for button in @buttons
+    for button, i in @buttons
+      continue if button.params.attached? and button.params.attached is true
+
       switch button.target[0]
         when "#"
           buttonElem = document.getElementById button.target.substring(1)
@@ -258,6 +260,8 @@ class OmiseCard
 
           if @iframeWrapper? and @iframe?
             @_showIframe event.target.omiseCardParams
+
+        @buttons[i].params.attached = true
 
     return
 
