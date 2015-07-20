@@ -1,5 +1,9 @@
 "use strict"
 
+a = do ->
+  b: ->
+    return true
+
 class OmiseCard
   constructor: (params={}) ->
     # Define construct variables
@@ -66,7 +70,7 @@ class OmiseCard
     _e.style.opacity            = "0"
     _e.style.border             = "none"
 
-    document.body.appendChild(_e)
+    document.body?.appendChild(_e)
     return _e
 
   ###
@@ -292,4 +296,5 @@ OmiseCardInstance = new OmiseCard
 window.removeEventListener "message", OmiseCardInstance._listenToCardJsIframeMessage
 window.addEventListener "message", OmiseCardInstance._listenToCardJsIframeMessage, false
 
-window.OmiseCard = OmiseCardInstance
+window._OmiseCard = OmiseCard
+window.OmiseCard  = OmiseCardInstance

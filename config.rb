@@ -40,6 +40,12 @@ configure :development do
   config[:omise_card_url] = "http://localhost:4568"
 
   # activate :livereload
+
+  # Used 'sprockets' library for 'jasmine' library
+  activate :sprockets
+
+  # Javascript unit test running
+  activate :jasmine
 end
 
 # Methods defined in the helpers block are available in templates
