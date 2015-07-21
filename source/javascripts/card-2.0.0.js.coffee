@@ -1,9 +1,5 @@
 "use strict"
 
-a = do ->
-  b: ->
-    return true
-
 class OmiseCard
   constructor: (params={}) ->
     # Define construct variables
@@ -13,11 +9,7 @@ class OmiseCard
     @serverOrigin = "https://card.omise.co"
 
     # Initiate OmiseCard's default parameters
-    @_setParams params
-
-    # Initiate OmiseCard's iframe
-    @iframeWrapper  = @_createIframeWrapper()
-    @iframe         = @_createIframe()
+    @_setParams()
 
   ###
   # Set parameters for Card.js
@@ -31,22 +23,21 @@ class OmiseCard
   # @param {boolean} [params.locationField=false]               - If value is true, the popup will have the Postal code and City fields included
   # @param {boolean} [params.submitFormTarget=""]               -
   # @param {boolean} [params.submitAuto=true]                   -
-  # @param {object} [_default={}]                               -
   # @param {boolean} [_overrideDefault=true]                    -
   # @return {object}
   ###
-  _setParams: (params, _default={}, _overrideDefault=true) ->
+  _setParams: (params={}, _overrideDefault=true) ->
     _p =
-      amount            : params.amount || _default.amount || 0
-      publicKey         : params.publicKey || _default.publicKey || ""
-      currency          : params.currency || _default.currency || "THB"
-      logo              : params.logo || _default.logo || ""
-      frameLabel        : params.frameLabel || _default.frameLabel || "Omise Payment Gateway"
-      submitLabel       : params.submitLabel || _default.submitLabel || "CHECKOUT"
-      buttonLabel       : params.buttonLabel || _default.buttonLabel || "Pay with Omise"
-      locationField     : params.locationField || _default.locationField || false
-      submitFormTarget  : params.submitFormTarget || _default.submitFormTarget || ""
-      submitAuto        : params.submitAuto || _default.submitAuto || true
+      amount            : params.amount || @params.amount || 0
+      publicKey         : params.publicKey || @params.publicKey || ""
+      currency          : params.currency || @params.currency || "THB"
+      logo              : params.logo || @params.logo || ""
+      frameLabel        : params.frameLabel || @params.frameLabel || "Omise Payment Gateway"
+      submitLabel       : params.submitLabel || @params.submitLabel || "CHECKOUT"
+      buttonLabel       : params.buttonLabel || @params.buttonLabel || "Pay with Omise"
+      locationField     : params.locationField || @params.locationField || "no"
+      submitFormTarget  : params.submitFormTarget || @params.submitFormTarget || ""
+      submitAuto        : params.submitAuto || @params.submitAuto || "yes"
 
     @params = _p if _overrideDefault is true
     return _p
@@ -56,6 +47,7 @@ class OmiseCard
   # @return {object} An iframe wrapper element
   ###
   _createIframeWrapper: ->
+    console.log 'xxx'
     _e                          = document.createElement("DIV")
     _e.id                       = "OmiseCardJsIFrameWrapper"
     _e.style.backgroundColor    = 'rgba(' + [0,0,0,0.88].join(',') + ')'
@@ -163,30 +155,32 @@ class OmiseCard
   # Observe a message of event that send from iframe
   # @return {void}
   ###
-  _listenToCardJsIframeMessage: (event) =>
-    if !event.origin then return
-    if event.origin != @serverOrigin then return
+  _listenToCardJsIframeMessage: ->
+    _listener = (event) =>
+      if !event.origin then return
+      if event.origin != @serverOrigin then return
 
-    if event.data == "closeOmiseCardJsPopup"
-      @_hideIframe()
-    else
-      try
-        _result = JSON.parse event.data
-        _result.submitAuto    = true                                  # Mock-data (Don't forget to remove it)
-        _result.tokenFieldId  = "form-class-checkout-us-omiseToken"   # Mock-data (Don't forget to remove it)
-        _input = document.getElementById(_result.tokenFieldId)
+      if event.data == "closeOmiseCardJsPopup"
+        @_hideIframe()
+      else
+        try
+          _result = JSON.parse event.data
+          _result.submitAuto    = true                                  # Mock-data (Don't forget to remove it)
+          _result.tokenFieldId  = "form-class-checkout-us-omiseToken"   # Mock-data (Don't forget to remove it)
+          _input = document.getElementById(_result.tokenFieldId)
 
-        if _input?
-          _input.value  = _result.omiseToken
+          if _input?
+            _input.value  = _result.omiseToken
+            @_hideIframe()
+
+            if _result.submitAuto is true
+              _formObject = _input.parentNode
+              _formObject.submit()
+        catch e
           @_hideIframe()
 
-          if _result.submitAuto is true
-            _formObject = _input.parentNode
-            _formObject.submit()
-      catch e
-        @_hideIframe()
-
-    return
+    window.removeEventListener "message", _listener
+    window.addEventListener "message", _listener, false
 
   ###
   # Create a token field for contain token_id that response from ifram
@@ -222,7 +216,14 @@ class OmiseCard
   # @return {void}
   ###
   configure: (params={}) ->
-    @_setParams params, @params
+    @_setParams params
+
+    # Initiate OmiseCard's iframe
+    @iframeWrapper  = @_createIframeWrapper() if !@iframeWrapper?
+    @iframe         = @_createIframe() if !@iframe?
+
+    @_listenToCardJsIframeMessage()
+
     return
 
   ###
@@ -231,10 +232,10 @@ class OmiseCard
   # @param {object} params  - Specific parameters that want to assign into a button
   # @return {void}
   ###
-  configureButton: (button, params) ->
+  configureButton: (button, params={}) ->
     @buttons.push(
         target: button,
-        params: @_setParams params, @params, false
+        params: @_setParams params, false
     )
 
   ###
@@ -291,10 +292,6 @@ if scriptElement? and scriptElement.getAttribute("data-key")? and scriptElement.
 
 # Create OmiseCard instance variable
 OmiseCardInstance = new OmiseCard
-
-# Reset an event listener
-window.removeEventListener "message", OmiseCardInstance._listenToCardJsIframeMessage
-window.addEventListener "message", OmiseCardInstance._listenToCardJsIframeMessage, false
 
 window._OmiseCard = OmiseCard
 window.OmiseCard  = OmiseCardInstance
