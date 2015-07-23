@@ -79,4 +79,10 @@ configure :build do
 
   # Or use a different image path
   # set :http_prefix, "/Content/images/"
+
+  # Used 'sprockets' library for 'jasmine' library
+  activate :sprockets
+
+  # Javascript unit test running
+  activate :jasmine
 end
