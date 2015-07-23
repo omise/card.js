@@ -8,4 +8,5 @@ test:
   pre:
     - npm install -g jasmine
   override:
+  	- bundle
     - rake middleman_jasmine:ci
