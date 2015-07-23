@@ -1,7 +1,11 @@
 machine:
   timezone:
     Asia/Bangkok
+  ruby:
+    version: 2.1.2
 
 test:
+  pre:
+    - npm install -g jasmine
   override:
     - rake middleman_jasmine:ci
