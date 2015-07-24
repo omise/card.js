@@ -4,6 +4,10 @@ machine:
   ruby:
     version: 2.1.2
 
+compile:
+  override:
+    - echo "skip"
+
 test:
   override:
     - bin/rake middleman_jasmine:ci
