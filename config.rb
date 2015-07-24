@@ -36,7 +36,7 @@
 # activate :automatic_image_sizes
 
 # Reload the browser automatically whenever files change
-configure :development, :test do
+configure :development do
   config[:omise_card_url] = "http://localhost:4568"
 
   # activate :livereload
@@ -47,6 +47,17 @@ configure :development, :test do
   # Javascript unit test running
   activate :jasmine
 end
+
+configure :test do
+  config[:omise_card_url] = "http://localhost:4568"
+
+  # Used 'sprockets' library for 'jasmine' library
+  activate :sprockets
+
+  # Javascript unit test running
+  activate :jasmine
+end
+
 
 # Methods defined in the helpers block are available in templates
 # helpers do
