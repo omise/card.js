@@ -6,5 +6,4 @@ machine:
 
 test:
   override:
-    - bundle install
     - rake middleman_jasmine:ci

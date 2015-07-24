@@ -36,7 +36,7 @@
 # activate :automatic_image_sizes
 
 # Reload the browser automatically whenever files change
-configure :development do
+configure :development, :test do
   config[:omise_card_url] = "http://localhost:4568"
 
   # activate :livereload
