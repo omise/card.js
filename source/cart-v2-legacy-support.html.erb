@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>Card.js</title>
+        <meta name="apple-mobile-web-app-capable" content="yes">
+        <meta name="apple-mobile-web-app-status-bar-style" content="black">
+        <meta name="format-detection" content="telephone=no">
+        <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1.0, maximum-scale=1.0, target-densitydpi=device-dpi, user-scalable=no, minimal-ui">
+        <link href="https://cdn.omise.co/fonts/lato.css" rel="stylesheet" type="text/css" />
+        <link href="https://cdn.omise.co/fonts/lato.css" rel="stylesheet" type="text/css" />
+
+        <%= stylesheet_link_tag "all" %>
+    </head>
+    <body>
+
+      <form name="checkoutForm" method="POST" action="checkout">
+        <input type="hidden" name="description" value="Product order ฿100.25" />
+        <script type="text/javascript" src="/javascripts/card-2.0.0.js"
+          data-key="pkey_test_4zfuolwdegumf4k2qba"
+          data-image="PATH_TO_LOGO_IMAGE"
+          data-frame-label="Merchant site name"
+          data-button-label="Pay now"
+          data-submit-label="Submit"
+          data-location="yes"
+          data-amount="10025"
+          data-currency="thb"
+          >
+        </script>
+        <!--the script will render <input type="hidden" name="omiseToken"> for you automatically-->
+      </form>
+    </body>
+</html>

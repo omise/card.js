@@ -1,3 +1,6 @@
+require "bundler/setup"
+Bundler.require
+
 require 'jasmine'
 load 'jasmine/tasks/jasmine.rake'
 

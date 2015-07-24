@@ -37,7 +37,7 @@
 
 # Reload the browser automatically whenever files change
 configure :development do
-  config[:omise_card_url] = "http://localhost:4568"
+  config[:omise_card_url] = "http://localhost:4567"
 
   # activate :livereload
 
@@ -47,17 +47,6 @@ configure :development do
   # Javascript unit test running
   activate :jasmine
 end
-
-configure :test do
-  config[:omise_card_url] = "http://localhost:4568"
-
-  # Used 'sprockets' library for 'jasmine' library
-  activate :sprockets
-
-  # Javascript unit test running
-  activate :jasmine
-end
-
 
 # Methods defined in the helpers block are available in templates
 # helpers do
@@ -75,6 +64,15 @@ set :images_dir, 'images'
 # Build-specific configuration
 configure :build do
   config[:omise_card_url] = "https://card.omise.co"
+
+  # unless ENV['BUILD_ENV'] == 'test'
+  #   # Used 'sprockets' library for 'jasmine' library
+  #   activate :sprockets
+
+  #   # Javascript unit test running
+  #   activate :jasmine
+  # end
+
 
   # For example, change the Compass output style for deployment
   # activate :minify_css
