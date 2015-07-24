@@ -6,4 +6,4 @@ machine:
 
 test:
   override:
-    - rake middleman_jasmine:ci
+    - bin/rake middleman_jasmine:ci
