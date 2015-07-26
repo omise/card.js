@@ -1,68 +1,89 @@
 ###
 # Existing methods assertions
-# 1. Expect that core methods must be exist in the OmiseCard instance
-# 2. Expect that a new OmiseCard instance must be the same as in window.OmiseCard instance
 ###
-describe "Existing method assertions", ->
-  OmiseCardInstance = {}
+describe "The OmiseCard instance object", ->
   beforeEach ->
-    OmiseCardInstance = new _OmiseCard
+    @OmiseCardInstance = new _OmiseCard
     return
 
-  # 1
-  it "expect that core methods must be exist in the OmiseCard instance", ->
-    expect(typeof OmiseCardInstance._setParams).toEqual("function")
-    expect(typeof OmiseCardInstance._createIframeWrapper).toEqual("function")
-    expect(typeof OmiseCardInstance._createIframe).toEqual("function")
-    expect(typeof OmiseCardInstance._showIframe).toEqual("function")
-    expect(typeof OmiseCardInstance._hideIframe).toEqual("function")
-    expect(typeof OmiseCardInstance._popIframeData).toEqual("function")
-    expect(typeof OmiseCardInstance._listenToCardJsIframeMessage).toEqual("function")
-    expect(typeof OmiseCardInstance._createTokenField).toEqual("function")
-    expect(typeof OmiseCardInstance.configure).toEqual("function")
-    expect(typeof OmiseCardInstance.configureButton).toEqual("function")
-    expect(typeof OmiseCardInstance.attach).toEqual("function")
+  afterEach ->
+    iframeWrapper  = document.getElementById("OmiseCardJsIFrameWrapper")
+    document.body.removeChild iframeWrapper if iframeWrapper?
+
+    delete @OmiseCardInstance
     return
 
-  # 2
-  it "expect that a new OmiseCard instance must be the same as in window.OmiseCard variable", ->
-    expect(OmiseCardInstance).toEqual(OmiseCard)
+  it "must contain _setParams method", ->
+    expect(typeof @OmiseCardInstance._setParams).toEqual("function")
+
+  it "must contain _createIframeWrapper method", ->
+    expect(typeof @OmiseCardInstance._createIframeWrapper).toEqual("function")
+
+  it "must contain _createIframe method", ->
+    expect(typeof @OmiseCardInstance._createIframe).toEqual("function")
+  
+  it "must contain _showIframe method", ->
+    expect(typeof @OmiseCardInstance._showIframe).toEqual("function")
+  
+  it "must contain _hideIframe method", ->
+    expect(typeof @OmiseCardInstance._hideIframe).toEqual("function")
+  
+  it "must contain _popIframeData method", ->
+    expect(typeof @OmiseCardInstance._popIframeData).toEqual("function")
+  
+  it "must contain _listenToCardJsIframeMessage method", ->
+    expect(typeof @OmiseCardInstance._listenToCardJsIframeMessage).toEqual("function")
+  
+  it "must contain _createTokenField method", ->
+    expect(typeof @OmiseCardInstance._createTokenField).toEqual("function")
+  
+  it "must contain configure method", ->
+    expect(typeof @OmiseCardInstance.configure).toEqual("function")
+  
+  it "must contain configureButton method", ->
+    expect(typeof @OmiseCardInstance.configureButton).toEqual("function")
+  
+  it "must contain attach method", ->
+    expect(typeof @OmiseCardInstance.attach).toEqual("function")
+    return
+
+  it "must contain correctly default values", ->
+    expect(@OmiseCardInstance.params).toEqual(
+      publicKey: ""
+      amount: 0
+      currency: "THB"
+      logo: ""
+      frameLabel: "Omise Payment Gateway"
+      submitLabel: "CHECKOUT"
+      buttonLabel: "Pay with Omise"
+      locationField: "no"
+      submitFormTarget: ""
+      submitAuto: "yes"
+    )
+
+  it "must be the same as in window.OmiseCard object", ->
+    expect(@OmiseCardInstance).toEqual(OmiseCard)
     return
 
 ###
 # Configuring OmiseCard's parameter assertions
-# 1. Expect that the OmiseCard's default parameters must contain correctly values
-# 2. Expect that the configure() method must be able to alter parameter inside OmiseCard.params object
-# 3. Expect that the configure() method must be use the default parameter if it is not set with a new value
-# 4. Expect that the configure() method must not be able to add any parameter that did not define inside _setParams() method into OmiseCard.params object
 ###
-describe "Configuring OmiseCard's parameter assertions", ->
-  OmiseCardInstance = {}
+describe "The OmiseCard's configure() method", ->
   beforeEach ->
-    OmiseCardInstance = new _OmiseCard
+    @OmiseCardInstance = new _OmiseCard
     return
 
-  # 1
-  it "expect that the OmiseCard's default parameters must contain correctly values", ->
-    expect(OmiseCardInstance.params).toEqual(
-      Object
-        amount: 0
-        publicKey: ""
-        currency: "THB"
-        logo: ""
-        frameLabel: "Omise Payment Gateway"
-        submitLabel: "CHECKOUT"
-        buttonLabel: "Pay with Omise"
-        locationField: "no"
-        submitFormTarget: ""
-        submitAuto: "yes"
-    )
+  afterEach ->
+    iframeWrapper  = document.getElementById("OmiseCardJsIFrameWrapper")
+    document.body.removeChild iframeWrapper if iframeWrapper?
 
-  # 2
-  it "expect that the configure() method must be able to alter parameter inside OmiseCard.params object", ->
-    OmiseCardInstance.configure
-      amount: 50000
+    delete @OmiseCardInstance
+    return
+
+  it "must be able to alter default parameter's values", ->
+    @OmiseCardInstance.configure
       publicKey: "my-public-key"
+      amount: 50000
       currency: "THBx"
       logo: "//omise.co/img/logo.png"
       frameLabel: "Payment Form"
@@ -72,164 +93,240 @@ describe "Configuring OmiseCard's parameter assertions", ->
       submitFormTarget: "#checkout-form"
       submitAuto: "no"
 
-    expect(OmiseCardInstance.params.amount).toEqual(50000)
-    expect(OmiseCardInstance.params.publicKey).toEqual("my-public-key")
-    expect(OmiseCardInstance.params.currency).toEqual("THBx")
-    expect(OmiseCardInstance.params.logo).toEqual("//omise.co/img/logo.png")
-    expect(OmiseCardInstance.params.frameLabel).toEqual("Payment Form")
-    expect(OmiseCardInstance.params.submitLabel).toEqual("Checkout with Omise")
-    expect(OmiseCardInstance.params.buttonLabel).toEqual("PAY IT!!")
-    expect(OmiseCardInstance.params.locationField).toEqual("yes")
-    expect(OmiseCardInstance.params.submitFormTarget).toEqual("#checkout-form")
-    expect(OmiseCardInstance.params.submitAuto).toEqual("no")
-    return
-
-  # 3
-  it "expect that the configure() method must be use the default parameter if it is not set with a new value", ->
-    OmiseCardInstance.configure
-      amount: 50000
+    expect(@OmiseCardInstance.params).toEqual(
       publicKey: "my-public-key"
+      amount: 50000
+      currency: "THBx"
+      logo: "//omise.co/img/logo.png"
+      frameLabel: "Payment Form"
+      submitLabel: "Checkout with Omise"
+      buttonLabel: "PAY IT!!"
+      locationField: "yes"
+      submitFormTarget: "#checkout-form"
+      submitAuto: "no"
+    )
 
-    expect(OmiseCardInstance.params.currency).toEqual("THB")
-    expect(OmiseCardInstance.params.logo).toEqual("")
-    expect(OmiseCardInstance.params.frameLabel).toEqual("Omise Payment Gateway")
-    expect(OmiseCardInstance.params.submitLabel).toEqual("CHECKOUT")
-    expect(OmiseCardInstance.params.buttonLabel).toEqual("Pay with Omise")
-    expect(OmiseCardInstance.params.locationField).toEqual("no")
-    expect(OmiseCardInstance.params.submitFormTarget).toEqual("")
-    expect(OmiseCardInstance.params.submitAuto).toEqual("yes")
     return
 
-  # 4
-  it "expect that the configure() method must not be able to add any parameter that did not define inside _setParams() method into OmiseCard.params object", ->
-    OmiseCardInstance.configure
+  it "must use the default parameters if it does not set in these argument", ->
+    @OmiseCardInstance.configure
+      publicKey: "shop-public-key"
+      amount: 1000000
+
+    expect(@OmiseCardInstance.params).toEqual(
+      publicKey: "shop-public-key"
+      amount: 1000000
+      currency: "THB"
+      logo: ""
+      frameLabel: "Omise Payment Gateway"
+      submitLabel: "CHECKOUT"
+      buttonLabel: "Pay with Omise"
+      locationField: "no"
+      submitFormTarget: ""
+      submitAuto: "yes"
+    )
+    
+    return
+
+  it "must not be able to add undefined parameter", ->
+    @OmiseCardInstance.configure
       anotherParam: "can not add this"
 
-    expect(OmiseCardInstance.params.anotherParam).toBeUndefined()
+    expect(@OmiseCardInstance.params.anotherParam).toBeUndefined()
+    return
+
+###
+# OmiseCard iframe
+###
+describe "The OmiseCard's iframe", ->
+  beforeEach ->
+    @OmiseCardInstance = new _OmiseCard
+    return
+
+  afterEach ->
+    iframeWrapper  = document.getElementById("OmiseCardJsIFrameWrapper")
+    document.body.removeChild iframeWrapper if iframeWrapper?
+
+    delete @OmiseCardInstance
+    return
+
+  it "must create after call configure() method", ->
+    spyOn( @OmiseCardInstance, '_createIframeWrapper').and.callThrough()
+    spyOn( @OmiseCardInstance, '_createIframe').and.callThrough()
+
+    @OmiseCardInstance.configure
+      publicKey: "shop-public-key"
+      amount: 1000000
+
+    expect(@OmiseCardInstance._createIframeWrapper).toHaveBeenCalled()
+    expect(@OmiseCardInstance._createIframe).toHaveBeenCalled()
+    return
+
+  it "must create only one iframe even call configure() multiple times", ->
+    spyOn( @OmiseCardInstance, '_createIframeWrapper').and.callThrough()
+    spyOn( @OmiseCardInstance, '_createIframe').and.callThrough()
+
+    @OmiseCardInstance.configure
+      publicKey: "shop-public-key"
+      amount: 1000000
+
+    @OmiseCardInstance.configure
+      amount: 2000000
+
+    @OmiseCardInstance.configure
+      amount: 3000000
+
+    expect(@OmiseCardInstance._createIframeWrapper.calls.count()).toEqual(1)
+    expect(@OmiseCardInstance._createIframe.calls.count()).toEqual(1)
+    return
+
+  it "must append on the DOM", ->
+    @OmiseCardInstance.configure
+      publicKey: "shop-public-key"
+      amount: 1000000
+
+    expect(document.getElementById("OmiseCardJsIFrameWrapper")).not.toBeNull()
+    expect(document.getElementById("OmiseCardJsIFrame")).not.toBeNull()
     return
 
 ###
 # Configuring button behaviour (attributes)
-# 1. Expect that the OmiseCard.buttons must be an empty array in the first time initial
-# 2. Expect that possible to create a new button behaviour without set any attributes (just inherited all of attributes, value from OmiseCard.params
-# 3. Expect that possible to alter some of button's attributes when create a new one of it
-# 4. Expect that possible to alter some of button's attributes when create a new one of it - in case of 'multiple buttons'
 ###
-describe "Configuring button behaviour (attributes)", ->
-  OmiseCardInstance = {}
+describe "The OmiseCard's button", ->
   beforeEach ->
     # Create new OmiseCard instance
-    OmiseCardInstance = new _OmiseCard
+    @OmiseCardInstance = new _OmiseCard
 
     # Initiate default values
-    OmiseCardInstance.configure
-      amount: 50000
+    @OmiseCardInstance.configure
       publicKey: "my-public-key"
-
+      amount: 50000
     return
 
-  # 1
-  it "expect that the OmiseCard.buttons must be an empty array in the first time initial", ->
-    expect(OmiseCardInstance.buttons.length).toEqual(0)
+  afterEach ->
+    iframeWrapper  = document.getElementById("OmiseCardJsIFrameWrapper")
+    document.body.removeChild iframeWrapper if iframeWrapper?
 
-  # 2
-  it "expect that possible to create a new button behaviour without set any attributes (just inherited all of attributes, value from OmiseCard.params", ->
-    # Configure new button attribute
-    OmiseCardInstance.configureButton "MyButton"
-    expect(OmiseCardInstance.buttons.length).toEqual(1)
-    expect(OmiseCardInstance.buttons[0].params).toEqual(
-      Object
-        amount: 50000
-        publicKey: "my-public-key"
-        currency: "THB"
-        logo: ""
-        frameLabel: "Omise Payment Gateway"
-        submitLabel: "CHECKOUT"
-        buttonLabel: "Pay with Omise"
-        locationField: "no"
-        submitFormTarget: ""
-        submitAuto: "yes"
+    delete @OmiseCardInstance
+    return
+
+  it "must be an empty array before config it", ->
+    expect(@OmiseCardInstance.buttons.length).toEqual(0)
+    return
+
+  it "must be able to create a new behaviour", ->
+    @OmiseCardInstance.configureButton "MyButton"
+
+    expect(@OmiseCardInstance.buttons.length).toEqual(1)
+    return
+
+  it "must be able to create a new behaviour with default values", ->
+    @OmiseCardInstance.configureButton "MyButton"
+
+    expect(@OmiseCardInstance.buttons[0].params).toEqual(
+      publicKey: "my-public-key"
+      amount: 50000
+      currency: "THB"
+      logo: ""
+      frameLabel: "Omise Payment Gateway"
+      submitLabel: "CHECKOUT"
+      buttonLabel: "Pay with Omise"
+      locationField: "no"
+      submitFormTarget: ""
+      submitAuto: "yes"
     )
     return
 
-  # 3
-  it "expect that possible to alter some of button's attributes when create a new one of it", ->
-    OmiseCardInstance.configureButton "MyButton-1",
+  it "must be able to create a new behaviour and alter some of default values", ->
+    @OmiseCardInstance.configureButton "MyButton-1",
       amount: 100000
 
-    expect(OmiseCardInstance.buttons[0].params.amount).toEqual(100000)
-    expect(OmiseCardInstance.params.publicKey).toEqual("my-public-key")
-    expect(OmiseCardInstance.params.currency).toEqual("THB")
-    expect(OmiseCardInstance.params.logo).toEqual("")
-    expect(OmiseCardInstance.params.frameLabel).toEqual("Omise Payment Gateway")
-    expect(OmiseCardInstance.params.submitLabel).toEqual("CHECKOUT")
-    expect(OmiseCardInstance.params.buttonLabel).toEqual("Pay with Omise")
-    expect(OmiseCardInstance.params.locationField).toEqual("no")
-    expect(OmiseCardInstance.params.submitFormTarget).toEqual("")
-    expect(OmiseCardInstance.params.submitAuto).toEqual("yes")
+    expect(@OmiseCardInstance.buttons[0].params).toEqual(
+      publicKey: "my-public-key"
+      amount: 100000
+      currency: "THB"
+      logo: ""
+      frameLabel: "Omise Payment Gateway"
+      submitLabel: "CHECKOUT"
+      buttonLabel: "Pay with Omise"
+      locationField: "no"
+      submitFormTarget: ""
+      submitAuto: "yes"
+    )
 
-  # 4
-  it "expect that possible to alter some of button's attributes when create a new one of it - in case of 'multiple buttons'", ->
-    OmiseCardInstance.configureButton "MyButton-1",
+  it "possible to contain many behaviours", ->
+    @OmiseCardInstance.configureButton "MyButton-1",
       amount: 10000
 
-    OmiseCardInstance.configureButton "MyButton-2",
-      amount: 20000
+    @OmiseCardInstance.configureButton "MyButton-3"
 
-    OmiseCardInstance.configureButton "MyButton-3"
+    @OmiseCardInstance.configureButton "MyButton-4",
+      amount: 30000
 
-    OmiseCardInstance.configureButton "MyButton-4",
-      amount: 40000
+    expect(@OmiseCardInstance.buttons[0].params.amount).toEqual(10000)
+    expect(@OmiseCardInstance.buttons[1].params.amount).toEqual(50000)
+    expect(@OmiseCardInstance.buttons[2].params.amount).toEqual(30000)
 
-    expect(OmiseCardInstance.buttons[0].params.amount).toEqual(10000)
-    expect(OmiseCardInstance.buttons[1].params.amount).toEqual(20000)
-    expect(OmiseCardInstance.buttons[2].params.amount).toEqual(50000)
-    expect(OmiseCardInstance.buttons[3].params.amount).toEqual(40000)
+    expect(@OmiseCardInstance.params.amount).toEqual(50000)
 
-    expect(OmiseCardInstance.params.amount).toEqual(50000)
+  it "'attached', 'attachFailed', 'attachFailedMessage' params must be 'undefined' before run .attach() method", ->
+    @OmiseCardInstance.configureButton "my-button-1"
+
+    expect(@OmiseCardInstance.buttons[0].params.attached).toBeUndefined()
+    expect(@OmiseCardInstance.buttons[0].params.attachFailed).toBeUndefined()
+    expect(@OmiseCardInstance.buttons[0].params.attachFailedMessage).toBeUndefined()
 
 ###
-# Attaching button behaviour (attributes) into button elements of a page
-# 1. Expect that 'attached', 'attachFailed', 'attachFailedMessage' params must be 'undefined' before run .attach() method
-# 2. Expect that .attach() must be fail because button element did not defined on a page
-# 3. Expect that .attach() must be able to attach multiple buttons
+# Configuring button behaviour (attributes)
 ###
-describe "Attaching button behaviour (attributes) into button elements of a page", ->
-  OmiseCardInstance = {}
+describe "The OmiseCard's attach() method", ->
   beforeEach ->
     # Create new OmiseCard instance
-    OmiseCardInstance = new _OmiseCard
+    @OmiseCardInstance = new _OmiseCard
 
     # Initiate default values
-    OmiseCardInstance.configure
-      amount: 50000
+    @OmiseCardInstance.configure
       publicKey: "my-public-key"
+      amount: 50000
 
+    # Initiate button behaviour
+    @OmiseCardInstance.configureButton "my-button-1"
+
+    # Create elements
+    @_divElem      = document.createElement 'DIV'
+    @_divElem.id   = "custom-div"
+    document.body.appendChild @_divElem
     return
 
-  # 1
-  it "expect that 'attached', 'attachFailed', 'attachFailedMessage' params must be 'undefined' before run .attach() method", ->
-    OmiseCardInstance.configureButton "my-button-1"
+  afterEach ->
+    iframeWrapper  = document.getElementById("OmiseCardJsIFrameWrapper")
+    document.body.removeChild iframeWrapper if iframeWrapper?
 
-    expect(OmiseCardInstance.buttons[0].params.attached).toBeUndefined()
-    expect(OmiseCardInstance.buttons[0].params.attachFailed).toBeUndefined()
-    expect(OmiseCardInstance.buttons[0].params.attachFailedMessage).toBeUndefined()
+    div  = document.getElementById("custom-div")
+    document.body.removeChild div if div?
 
-  # 2
-  it "expect that .attach() must be fail because button element did not defined on a page", ->
-    OmiseCardInstance.configureButton "my-button-1"
-    OmiseCardInstance.attach()
+    delete @_divElem
+    delete @OmiseCardInstance
+    return
 
-    expect(OmiseCardInstance.buttons[0].params.attached).toBeFalsy()
-    expect(OmiseCardInstance.buttons[0].params.attachFailed).toBeTruthy()
-    expect(OmiseCardInstance.buttons[0].params.attachFailedMessage).toEqual("button element not found")
+  it "should be fail because button element did not defined on a page", ->
+    @OmiseCardInstance.attach()
 
-  # 3
-  it "expect that .attach() must be able to attach multiple buttons", ->
+    expect(@OmiseCardInstance.buttons[0].params.attached).toBeFalsy()
+    expect(@OmiseCardInstance.buttons[0].params.attachFailed).toBeTruthy()
+    expect(@OmiseCardInstance.buttons[0].params.attachFailedMessage).toEqual("button element not found")
+
+  it "must be able to attach button behaviour into button element", ->
     # Create elements
-    _formElem               = document.createElement 'FORM'
-    _formElem.id            = "form-test"
+    _buttonElem            = document.createElement 'BUTTON'
+    _buttonElem.id         = "my-button-1"
+    
+    @_divElem.appendChild _buttonElem
 
+    @OmiseCardInstance.attach()
+    expect(@OmiseCardInstance.buttons[0].params.attached).toBeTruthy()
+
+  it "must be able to attach button behaviours into multiple button element", ->
     _buttonElem1            = document.createElement 'BUTTON'
     _buttonElem1.id         = "my-button-1"
 
@@ -239,23 +336,19 @@ describe "Attaching button behaviour (attributes) into button elements of a page
     _buttonElem3            = document.createElement 'BUTTON'
     _buttonElem3.id         = "my-button-3"
 
-    _formElem.appendChild _buttonElem1
-    _formElem.appendChild _buttonElem2
-    _formElem.appendChild _buttonElem3
-    document.body.appendChild _formElem
+    @_divElem.appendChild _buttonElem1
+    @_divElem.appendChild _buttonElem2
+    @_divElem.appendChild _buttonElem3
 
-    OmiseCardInstance.configureButton "#my-button-1"
-    OmiseCardInstance.configureButton ".my-button-2"
-    OmiseCardInstance.configureButton "my-button-3"
-    OmiseCardInstance.configureButton "my-button-4"
+    @OmiseCardInstance.configureButton ".my-button-2"
+    @OmiseCardInstance.configureButton "#my-button-3"
+    @OmiseCardInstance.configureButton ".my-button-4"
 
-    OmiseCardInstance.attach()
+    @OmiseCardInstance.attach()
 
-    expect(OmiseCardInstance.buttons[0].params.attached).toBeTruthy()
-    expect(OmiseCardInstance.buttons[1].params.attached).toBeTruthy()
-    expect(OmiseCardInstance.buttons[2].params.attached).toBeTruthy()
-    expect(OmiseCardInstance.buttons[3].params.attached).toBeFalsy()
-    expect(OmiseCardInstance.buttons[3].params.attachFailed).toBeTruthy()
-    expect(OmiseCardInstance.buttons[3].params.attachFailedMessage).toEqual("button element not found")
-
-    document.body.removeChild _formElem
+    expect(@OmiseCardInstance.buttons[0].params.attached).toBeTruthy()
+    expect(@OmiseCardInstance.buttons[1].params.attached).toBeTruthy()
+    expect(@OmiseCardInstance.buttons[2].params.attached).toBeTruthy()
+    expect(@OmiseCardInstance.buttons[3].params.attached).toBeFalsy()
+    expect(@OmiseCardInstance.buttons[3].params.attachFailed).toBeTruthy()
+    expect(@OmiseCardInstance.buttons[3].params.attachFailedMessage).toEqual("button element not found")
