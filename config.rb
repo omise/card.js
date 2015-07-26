@@ -64,16 +64,7 @@ set :images_dir, 'images'
 # Build-specific configuration
 configure :build do
   config[:omise_card_url] = "https://card.omise.co"
-
-  # unless ENV['BUILD_ENV'] == 'test'
-  #   # Used 'sprockets' library for 'jasmine' library
-  #   activate :sprockets
-
-  #   # Javascript unit test running
-  #   activate :jasmine
-  # end
-
-
+  
   # For example, change the Compass output style for deployment
   # activate :minify_css
 
@@ -88,10 +79,4 @@ configure :build do
 
   # Or use a different image path
   # set :http_prefix, "/Content/images/"
-
-  # Used 'sprockets' library for 'jasmine' library
-  activate :sprockets
-
-  # Javascript unit test running
-  activate :jasmine
 end
