@@ -1,3 +1,5 @@
+[![Circle CI](https://circleci.com/gh/omise/card.js.svg?style=svg)](https://circleci.com/gh/omise/card.js)
+
 Card.js
 =======
 
@@ -13,9 +15,9 @@ Installation
 
 Include the card.js from Omise CDN to your checkout form as below
 Available CDNs are:  
-- Singapore: `https://cdn.omise.co/card.js`
-- Japan: `https://cdn2.omise.co/card.js`
 
+- [https://cdn.omise.co/card.js.gz](https://cdn.omise.co/card.js.gz)
+- [https://cdn2.omise.co/card.js.gz](https://cdn2.omise.co/card.js.gz)
 
 ```html
 <html>
@@ -23,7 +25,7 @@ Available CDNs are:
 <body>
 <form name="checkoutForm" method="POST" action="test.html">
     <!--Sample checkout for a 995.00 THB charge-->
-    <script type="text/javascript" src="https://cdn.omise.co/card.js"
+    <script type="text/javascript" src="https://cdn.omise.co/card.js.gz"
       data-key="YOUR_PUBLIC_KEY"
       data-amount="99500"
       data-currency="thb"
@@ -44,7 +46,7 @@ Card.js will render a "Pay now" button which when a user click at the payout but
 Custom Integration
 ------------------
 
-The custom integration allows you to attach `card.js button behaviour` into your own custom button, These steps are as follows:
+The custom integration allows you to attach `card.js button behaviour` into your own custom button, these steps are as follows:
 - Include the **card.js** from Omise CDN to your checkout page
 - Use `OmiseCard.configure` to configuring your credential or/and your checkout information such as amount or publicKey
 - Then, use `OmiseCard.configureButton` to configuring the `card.js button behaviour` that you want to attach it to your button. First argunment is for `button name` that reference to `id` or `class` attribute of button
@@ -110,7 +112,9 @@ Custom integration also support `multiple buttons` in the same page. It is possi
 ```
 
 ### Specify a checkout form
-In some situations that the checkout button is not append in the right checkout form. You can set the `submitFormTarget` to reference the form that you want to submit it into the `card.js button behaviour`. After you submiting your credit card with `card.js form`, it will look into your `submitFormTarget` config and append the `Token Field` into that form. Then, submit it.
+
+In some situations if the checkout button is not append in the right checkout form, you can set the `submitFormTarget` to reference the form that you want to submit it into the `card.js button behaviour`. After  submiting the credit card from the form, it will look into your `submitFormTarget` config and append the `Token Field` into that form. Then submit it.
+
 ```html
 <script type="text/javascript">
     // Set default parameters
@@ -134,7 +138,9 @@ In some situations that the checkout button is not append in the right checkout 
 ```
 
 ### Override the config
-Also, it is possible to override the default parameters config. For instant, you might be create two buttons that the first button to check out your order with an original price and second button for a discount price that will show when user input some of coupon code.
+
+Also, it is possible to override the default parameters configurations. For instant, you might want to create two buttons that the first button to check out your order with an original price and second button for a different price that will show when user selects a diffent order variation.
+
 ```html
 <script type="text/javascript">
     // Set default parameters
