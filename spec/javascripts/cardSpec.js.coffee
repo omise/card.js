@@ -158,6 +158,9 @@ describe "The OmiseCard's iframe", ->
       publicKey: "shop-public-key"
       amount: 1000000
 
+    @OmiseCardInstance.configureButton 'my-button'
+    @OmiseCardInstance.attach()
+
     expect(@OmiseCardInstance._createIframeWrapper).toHaveBeenCalled()
     expect(@OmiseCardInstance._createIframe).toHaveBeenCalled()
     return
@@ -170,11 +173,10 @@ describe "The OmiseCard's iframe", ->
       publicKey: "shop-public-key"
       amount: 1000000
 
-    @OmiseCardInstance.configure
-      amount: 2000000
-
-    @OmiseCardInstance.configure
-      amount: 3000000
+    @OmiseCardInstance.configureButton 'my-button'
+    @OmiseCardInstance.attach()
+    @OmiseCardInstance.attach()
+    @OmiseCardInstance.attach()
 
     expect(@OmiseCardInstance._createIframeWrapper.calls.count()).toEqual(1)
     expect(@OmiseCardInstance._createIframe.calls.count()).toEqual(1)
@@ -184,6 +186,9 @@ describe "The OmiseCard's iframe", ->
     @OmiseCardInstance.configure
       publicKey: "shop-public-key"
       amount: 1000000
+
+    @OmiseCardInstance.configureButton 'my-button'
+    @OmiseCardInstance.attach()
 
     expect(document.getElementById("OmiseCardJsIFrameWrapper")).not.toBeNull()
     expect(document.getElementById("OmiseCardJsIFrame")).not.toBeNull()
@@ -289,9 +294,6 @@ describe "The OmiseCard's attach() method", ->
       publicKey: "my-public-key"
       amount: 50000
 
-    # Initiate button behaviour
-    @OmiseCardInstance.configureButton "my-button-1"
-
     # Create elements
     @_divElem      = document.createElement 'DIV'
     @_divElem.id   = "custom-div"
@@ -310,11 +312,14 @@ describe "The OmiseCard's attach() method", ->
     return
 
   it "should be fail because button element did not defined on a page", ->
+    # Initiate button behaviour
+    @OmiseCardInstance.configureButton "my-button-1"
     @OmiseCardInstance.attach()
 
     expect(@OmiseCardInstance.buttons[0].params.attached).toBeFalsy()
     expect(@OmiseCardInstance.buttons[0].params.attachFailed).toBeTruthy()
     expect(@OmiseCardInstance.buttons[0].params.attachFailedMessage).toEqual("button element not found")
+    return
 
   it "must be able to attach button behaviour into button element", ->
     # Create elements
@@ -323,8 +328,12 @@ describe "The OmiseCard's attach() method", ->
     
     @_divElem.appendChild _buttonElem
 
+    # Initiate button behaviour
+    @OmiseCardInstance.configureButton "my-button-1"
     @OmiseCardInstance.attach()
+
     expect(@OmiseCardInstance.buttons[0].params.attached).toBeTruthy()
+    return
 
   it "must be able to attach button behaviours into multiple button element", ->
     _buttonElem1            = document.createElement 'BUTTON'
@@ -340,10 +349,11 @@ describe "The OmiseCard's attach() method", ->
     @_divElem.appendChild _buttonElem2
     @_divElem.appendChild _buttonElem3
 
+    # Initiate button behaviour
+    @OmiseCardInstance.configureButton "my-button-1"
     @OmiseCardInstance.configureButton ".my-button-2"
     @OmiseCardInstance.configureButton "#my-button-3"
     @OmiseCardInstance.configureButton ".my-button-4"
-
     @OmiseCardInstance.attach()
 
     expect(@OmiseCardInstance.buttons[0].params.attached).toBeTruthy()
@@ -352,3 +362,44 @@ describe "The OmiseCard's attach() method", ->
     expect(@OmiseCardInstance.buttons[3].params.attached).toBeFalsy()
     expect(@OmiseCardInstance.buttons[3].params.attachFailed).toBeTruthy()
     expect(@OmiseCardInstance.buttons[3].params.attachFailedMessage).toEqual("button element not found")
+    return
+
+  it "must create a token field inside a div that button rely on", ->
+    # Create a form element
+    _formElem            = document.createElement 'FORM'
+    _formElem.id         = "my-form"
+    @_divElem.appendChild _formElem
+
+    # Create a button element
+    _buttonElem            = document.createElement 'BUTTON'
+    _buttonElem.id         = "my-button"
+    _formElem.appendChild _buttonElem
+
+    # Initiate button behaviour
+    @OmiseCardInstance.configureButton "my-button"
+    @OmiseCardInstance.attach()
+
+    expect(@OmiseCardInstance.buttons[0].params.attached).toBeTruthy()
+    expect(_formElem.getElementsByClassName("omisecardjs-checkout-btn").length).toEqual(1)
+    return
+
+  it "must create a token field inside a form target that be set in submitFormTarget parameter", ->
+    # Create a form element
+    _formElem         = document.createElement 'FORM'
+    _formElem.id      = "my-form"
+    @_divElem.appendChild _formElem
+
+    # Create a button element
+    _buttonElem1      = document.createElement 'BUTTON'
+    _buttonElem1.id   = "my-button"
+    @_divElem.appendChild _buttonElem1
+
+    # Initiate button behaviour
+    @OmiseCardInstance.configureButton "my-button",
+      submitFormTarget: "my-form"
+
+    @OmiseCardInstance.attach()
+
+    expect(@OmiseCardInstance.buttons[0].params.attached).toBeTruthy()
+    expect(_formElem.getElementsByClassName("omisecardjs-checkout-btn").length).toEqual(1)
+    return

@@ -193,7 +193,7 @@ class OmiseCard
   ###
   _createTokenField: (form, buttonElem, button) ->
     _inp            = document.createElement 'INPUT'
-    _inp.type       = "text"
+    _inp.type       = "hidden"
     _inp.name       = "omiseToken"
     _inp.id         = ""
     _inp.className  = "omisecardjs-checkout-btn"
@@ -236,12 +236,6 @@ class OmiseCard
   configure: (params={}) ->
     @_setParams params
 
-    # Initiate OmiseCard's iframe
-    @iframeWrapper  = @_createIframeWrapper() if !@iframeWrapper?
-    @iframe         = @_createIframe() if !@iframe?
-
-    @_listenToCardJsIframeMessage()
-
     return
 
   ###
@@ -263,6 +257,12 @@ class OmiseCard
   # @return {void}
   ###
   attach: ->
+    # Initiate OmiseCard's iframe
+    @iframeWrapper  = @_createIframeWrapper() if !@iframeWrapper?
+    @iframe         = @_createIframe() if !@iframe?
+
+    @_listenToCardJsIframeMessage()
+
     for button, i in @buttons
       continue if button.params.attached? and button.params.attached is true
 
