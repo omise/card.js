@@ -36,6 +36,11 @@ Available CDNs are:
 
 Note that the data-amount attribute requires the amount to be paid in Satangs (100 Satangs = 1 THB).
 
+How it works
+------------
+
+Card.js will render a "Pay now" button which when a user click at the payout button, a popup window with a credit card form will be displayed. The user will then fill out the credit card information and submit. If successful, the popup will be closed and your form will be automatically submitted to your server. Otherwise there will be an error information shown.  
+
 Custom Integration
 ------------------
 
@@ -154,10 +159,5 @@ Also, it is possible to override the default parameters config. For instant, you
 
 <script type="text/javascript">OmiseCard.attach();</script>
 ```
-
-How it works
-------------
-
-Card.js will render a "Pay now" button which when a user click at the payout button, a popup window with a credit card form will be displayed. The user will then fill out the credit card information and submit. If successful, the popup will be closed and your form will be automatically submitted to your server. Otherwise there will be an error information shown.  
 
 Full documentation: [https://docs.omise.co/card-js/](https://docs.omise.co/card-js/) 
