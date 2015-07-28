@@ -110,7 +110,10 @@
         errorMessage.html(response.message);
       } else {
         resetForm();
-        parent.window.postMessage('{ "omiseToken": "' + response.id + '" }', clientWindowDomain);
+
+        var tokenFieldId  = $("#tokenFieldId").val();
+        var submitAuto    = $("#submitAuto").val();
+        parent.window.postMessage('{ "omiseToken": "' + response.id + '", "submitAuto": "'+submitAuto+'", "tokenFieldId": "'+tokenFieldId+'" }', clientWindowDomain);
       };
     });
   });
@@ -122,7 +125,7 @@
     if (event.data) {
       var data = JSON.parse(event.data);
 
-      if (data.location) {
+      if (data.location && data.location == "yes") {
         $("#location_fields").show();
       };
 
@@ -142,6 +145,14 @@
 
       if (data.submitLabel) {
         $("#submit_label").html(data.submitLabel);
+      }
+
+      if (data.tokenFieldId) {
+        $("#tokenFieldId").val(data.tokenFieldId);
+      }
+
+      if (data.submitAuto) {
+        $("#submitAuto").val(data.submitAuto);
       }
 
       clientWindowDomain = event.origin;

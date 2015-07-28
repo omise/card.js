@@ -6,8 +6,7 @@ class OmiseCard
     @params       = {}
     @buttons      = []
     @iframeEvent  = {}
-    @serverOrigin = "http://localhost:4567"
-    # @serverOrigin = "https://card.omise.co"
+    @serverOrigin = "https://card.omise.co"
 
     # Initiate OmiseCard's default parameters
     @_setParams()

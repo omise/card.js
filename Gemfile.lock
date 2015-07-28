@@ -134,6 +134,7 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
+  jasmine
   middleman (~> 3.3.7)
   middleman-jasmine
   middleman-livereload (~> 3.1.0)
