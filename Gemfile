@@ -12,3 +12,13 @@ gem "wdm", "~> 0.1.0", :platforms => [:mswin, :mingw]
 
 # Windows does not come with time zone data
 gem "tzinfo-data", platforms: [:mswin, :mingw]
+
+group :development, :test do
+  # Sprockets is a Ruby library for compiling and serving web assets (assets management)
+  # Used with 'middleman-jasmine' for run Jasmine javascript unit test
+  gem "middleman-sprockets"
+
+  gem "jasmine"
+
+  gem "middleman-jasmine"
+end
