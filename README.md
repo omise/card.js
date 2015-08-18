@@ -36,7 +36,7 @@ Available CDNs are:
 </html>
 ```
 
-Note that the data-amount attribute requires the amount to be paid in Satangs (100 Satangs = 1 THB).
+*_Note that the data-amount attribute requires the amount to be paid in Satangs (100 Satangs = 1 THB)._*
 
 How it works
 ------------
@@ -46,13 +46,14 @@ Card.js will render a "Pay now" button which when a user click at the payout but
 Custom Integration
 ------------------
 
-The custom integration allows you to attach `card.js button behaviour` into your own custom button, these steps are as follows:
-- Include the **card.js** from Omise CDN to your checkout page
-- Use `OmiseCard.configure` to configuring your credential or/and your checkout information such as amount or publicKey
-- Then, use `OmiseCard.configureButton` to configuring the `card.js button behaviour` that you want to attach it to your button. First argunment is for `button name` that reference to `id` or `class` attribute of button
-- After that, call `OmiseCard.attach()` method in the buttom of the page to attach all of your config to button elements in your checkout page
+The custom integration allows you to attach `card.js button behaviour` into your own custom button, these are the steps to follow:
 
-Here is an example for custom integration with Card.js
+- Include **card.js** from Omise CDN to your checkout page.
+- Use `OmiseCard.configure` to configure your credentials (public Key) and your checkout information such as amount.
+- Then use `OmiseCard.configureButton` to configure `card.js button behaviour` that you want to attach it to your button. First argunment is for `button name` that references the target `id` or `class` attribute of button
+- After that, call `OmiseCard.attach()` method in the end of the page to attach all of your config to button elements in your checkout page.
+
+#### Example for custom integration with Card.js
 
 ```html
 <html>
@@ -84,7 +85,8 @@ Here is an example for custom integration with Card.js
 ```
 
 ### Multiple Buttons
-Custom integration also support `multiple buttons` in the same page. It is possible to create many of `card.js button behaviour` by call the `OmiseCard.configureButton` and assign the first argument with any of your button id (or class) name.
+
+Custom integration also supports `multiple buttons` in the same page. It is possible to create multiple `card.js button behaviour` by calling the `OmiseCard.configureButton` and assigning the first argument as any of your button id or class name.
 
 ```html
 <script type="text/javascript">
@@ -113,7 +115,7 @@ Custom integration also support `multiple buttons` in the same page. It is possi
 
 ### Specify a checkout form
 
-In some situations if the checkout button is not append in the right checkout form, you can set the `submitFormTarget` to reference the form that you want to submit it into the `card.js button behaviour`. After  submiting the credit card from the form, it will look into your `submitFormTarget` config and append the `Token Field` into that form. Then submit it.
+In some situations if the checkout button is not appended in the right checkout form, you can set the `submitFormTarget` to reference the form that you want to submit with `card.js button behaviour`. After submiting the credit card from the form, it will look into your `submitFormTarget` config and append the `Token Field` into that form. Then submit it.
 
 ```html
 <script type="text/javascript">
@@ -137,9 +139,9 @@ In some situations if the checkout button is not append in the right checkout fo
 <script type="text/javascript">OmiseCard.attach();</script>
 ```
 
-### Override the config
+### Overriding default parameters configurations
 
-Also, it is possible to override the default parameters configurations. For instant, you might want to create two buttons that the first button to check out your order with an original price and second button for a different price that will show when user selects a diffent order variation.
+It is possible to override the default parameters configurations. For instant, you might want to create two buttons such that the first button will check out your order with an original price and a second button for a different price. As an example, when the user selects a diffent order variation.
 
 ```html
 <script type="text/javascript">
