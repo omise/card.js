@@ -6,7 +6,7 @@ class OmiseCard
     @params       = {}
     @buttons      = []
     @iframeEvent  = {}
-    @serverOrigin = "https://omise-cdn.s3.amazonaws.com"
+    @serverOrigin = "https://cdn.omise.co"
     @directory    = "/card-2.0"
 
     # Initiate OmiseCard's default parameters
