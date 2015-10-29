@@ -6,7 +6,8 @@ class OmiseCard
     @params       = {}
     @buttons      = []
     @iframeEvent  = {}
-    @serverOrigin = "https://card.omise.co"
+    @serverOrigin = "https://cdn.omise.co"
+    @directory    = "/card-2.0"
 
     # Initiate OmiseCard's default parameters
     @_setParams()
@@ -71,7 +72,7 @@ class OmiseCard
   _createIframe: ->
     _elem                          = document.createElement("IFRAME")
     _elem.id                       = "OmiseCardJsIFrame"
-    _elem.src                      = @serverOrigin + "/index.html"
+    _elem.src                      = "#{@serverOrigin}#{@directory}/index.html"
     _elem.style.width              = "100%"
     _elem.style.height             = "100%"
     _elem.style.border             = "none"
@@ -149,7 +150,7 @@ class OmiseCard
       tokenFieldId  : params.tokenFieldId
       submitAuto    : params.submitAuto
 
-    @iframeEvent.postMessage JSON.stringify(data), @serverOrigin
+    @iframeEvent.postMessage JSON.stringify(data), @serverOrigin + @directory
     return
 
   ###
