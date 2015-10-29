@@ -3,7 +3,7 @@
 Card.js
 =======
 
-[Read the full documentation](https://docs.omise.co/card-js-api/)
+[Read the full documentation](https://www.omise.co/card-js-api/)
 
 Getting started
 ---------------
@@ -16,7 +16,7 @@ Installation
 Include the card.js from Omise CDN to your checkout form as below
 Available CDNs are:  
 
-- [https://cdn.omise.co/card-2.0.0.js.gz](https://cdn.omise.co/card-2.0.0.js.gz)
+- [https://cdn.omise.co/card.js.gz](https://cdn.omise.co/card.js.gz)
 
 ```html
 <html>
@@ -24,7 +24,7 @@ Available CDNs are:
 <body>
 <form name="checkoutForm" method="POST" action="test.html">
     <!--Sample checkout for a 995.00 THB charge-->
-    <script type="text/javascript" src="https://cdn.omise.co/card-2.0.0.js.gz"
+    <script type="text/javascript" src="https://cdn.omise.co/card.js.gz"
       data-key="YOUR_PUBLIC_KEY"
       data-amount="99500"
       data-currency="thb"
@@ -58,7 +58,7 @@ The custom integration allows you to attach `card.js button behaviour` into your
 <html>
 ...
 <body>
-<script type="text/javascript" src="https://cdn.omise.co/card-2.0.0.js.gz"></script>
+<script type="text/javascript" src="https://cdn.omise.co/card.js.gz"></script>
 <script type="text/javascript">
     // Set default parameters
     OmiseCard.configure({
@@ -167,4 +167,4 @@ It is possible to override the default parameters configurations. For instant, y
 <script type="text/javascript">OmiseCard.attach();</script>
 ```
 
-Full documentation: [https://docs.omise.co/card-js-api/](https://docs.omise.co/card-js-api/)
+Full documentation: [https://www.omise.co/card-js-api/](https://www.omise.co/card-js-api/)
