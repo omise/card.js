@@ -21,28 +21,28 @@ describe "The OmiseCard instance object", ->
 
   it "must contain _createIframe method", ->
     expect(typeof @OmiseCardInstance._createIframe).toEqual("function")
-  
+
   it "must contain _showIframe method", ->
     expect(typeof @OmiseCardInstance._showIframe).toEqual("function")
-  
+
   it "must contain _hideIframe method", ->
     expect(typeof @OmiseCardInstance._hideIframe).toEqual("function")
-  
+
   it "must contain _popIframeData method", ->
     expect(typeof @OmiseCardInstance._popIframeData).toEqual("function")
-  
+
   it "must contain _listenToCardJsIframeMessage method", ->
     expect(typeof @OmiseCardInstance._listenToCardJsIframeMessage).toEqual("function")
-  
+
   it "must contain _createTokenField method", ->
     expect(typeof @OmiseCardInstance._createTokenField).toEqual("function")
-  
+
   it "must contain configure method", ->
     expect(typeof @OmiseCardInstance.configure).toEqual("function")
-  
+
   it "must contain configureButton method", ->
     expect(typeof @OmiseCardInstance.configureButton).toEqual("function")
-  
+
   it "must contain attach method", ->
     expect(typeof @OmiseCardInstance.attach).toEqual("function")
     return
@@ -125,7 +125,7 @@ describe "The OmiseCard's configure() method", ->
       submitFormTarget: ""
       submitAuto: "yes"
     )
-    
+
     return
 
   it "must not be able to add undefined parameter", ->
@@ -325,7 +325,7 @@ describe "The OmiseCard's attach() method", ->
     # Create elements
     _buttonElem            = document.createElement 'BUTTON'
     _buttonElem.id         = "my-button-1"
-    
+
     @_divElem.appendChild _buttonElem
 
     # Initiate button behaviour

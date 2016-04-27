@@ -65,7 +65,7 @@ set :images_dir, 'images'
 configure :build do
 
   config[:omise_card_url] = "https://card.omise.co"
-  
+
   # For example, change the Compass output style for deployment
   activate :minify_css
 
