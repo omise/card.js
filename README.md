@@ -65,7 +65,7 @@ The custom integration allows you to attach `card.js button behaviour` into your
         publicKey: 'YOUR_PUBLIC_KEY',
         amount: 99500
     });
-    
+
     // Configuring your own custom button
     OmiseCard.configureButton('#checkout-button-1', {
         frameLabel: 'Merchant site name',
@@ -95,10 +95,10 @@ Custom integration also supports `multiple buttons` in the same page. It is poss
         amount: 99500,
         frameLabel: 'Merchant site name'
     });
-        
+
     // Configuring your button <button type="submit" id="checkout-button-1">PAY IT with ...</button>
     OmiseCard.configureButton('#checkout-button-1');
-    
+
     // Configuring your button <button type="submit" class="checkout-button-2">PAY IT NOW!</button>
     OmiseCard.configureButton('.checkout-button-2');
 </script>
@@ -125,7 +125,7 @@ In some situations if the checkout button is not appended in the right checkout 
         frameLabel: 'Merchant site name',
         submitFormTarget: '#my-custom-checkout-form'
     });
-    
+
     OmiseCard.configureButton('#checkout-button');
 </script>
 
@@ -150,7 +150,7 @@ It is possible to override the default parameters configurations. For instant, y
         amount: 1000000, // 10,000 THB
         frameLabel: 'Merchant site name'
     });
-    
+
     OmiseCard.configureButton('#checkout-button');
     OmiseCard.configureButton('#discount-button', {
         amount: 500000 // 5,000 THB

@@ -14,31 +14,31 @@ class OmiseCard
 
   ###
   # Set parameters for Card.js
-  # @param {int} params.amount                                  - Amount of price
-  # @param {string} params.publicKey                            - The public key that you can find in your dashboard once you're signed in
-  # @param {string} params.currency                             - Currency code
-  # @param {string} [params.logo=""]                            - Merchant logo image
-  # @param {string} [params.frameLabel=Omise Payment Gateway]   - The header text you want to show in the credit card popup window
-  # @param {string} [params.submitLabel=CHECKOUT]               - The label to be displayed in the submit button in credit card popup window
-  # @param {string} [params.buttonLabel=Pay with Omise]         - The label to be displayed in the button that is embeded in your form
-  # @param {boolean} [params.locationField=false]               - If value is true, the popup will have the Postal code and City fields included
-  # @param {boolean} [params.submitFormTarget=""]               -
-  # @param {boolean} [params.submitAuto=true]                   -
-  # @param {boolean} [_overrideDefault=true]                    -
+  # @param {int}     params.amount                             - amount of price
+  # @param {string}  params.publicKey                          - the public key that you can find in your dashboard once you're signed in
+  # @param {string}  params.currency                           - currency code
+  # @param {string}  [params.logo=""]                          - merchant logo image
+  # @param {string}  [params.frameLabel=Omise Payment Gateway] - the header text you want to show in the credit card popup window
+  # @param {string}  [params.submitLabel=CHECKOUT]             - the label to be displayed in the submit button in credit card popup window
+  # @param {string}  [params.buttonLabel=Pay with Omise]       - the label to be displayed in the button that is embeded in your form
+  # @param {boolean} [params.locationField=false]              - if value is true, the popup will have the postal code and city fields included
+  # @param {boolean} [params.submitFormTarget=""]              - card.js would create a token field to the target element that you assign to here
+  # @param {boolean} [params.submitAuto=true]                  - if value is true, it would submit a parent 'form' element automatically when receiving the response
+  # @param {boolean} [_overrideDefault=true]                   - if value is true, it would override the default setting by whatever you assign to the first argument
   # @return {object}
   ###
   _setParams: (params={}, _overrideDefault=true) ->
     _p =
-      amount            : params.amount || @params.amount || 0
-      publicKey         : params.publicKey || @params.publicKey || ""
-      currency          : params.currency || @params.currency || "THB"
-      logo              : params.logo || @params.logo || ""
-      frameLabel        : params.frameLabel || @params.frameLabel || "Omise Payment Gateway"
-      submitLabel       : params.submitLabel || @params.submitLabel || "CHECKOUT"
-      buttonLabel       : params.buttonLabel || @params.buttonLabel || "Pay with Omise"
-      locationField     : params.locationField || @params.locationField || "no"
-      submitFormTarget  : params.submitFormTarget || @params.submitFormTarget || ""
-      submitAuto        : params.submitAuto || @params.submitAuto || "yes"
+      amount           : params.amount || @params.amount || 0
+      publicKey        : params.publicKey || @params.publicKey || ""
+      currency         : params.currency || @params.currency || "THB"
+      logo             : params.logo || @params.logo || ""
+      frameLabel       : params.frameLabel || @params.frameLabel || "Omise Payment Gateway"
+      submitLabel      : params.submitLabel || @params.submitLabel || "CHECKOUT"
+      buttonLabel      : params.buttonLabel || @params.buttonLabel || "Pay with Omise"
+      locationField    : params.locationField || @params.locationField || "no"
+      submitFormTarget : params.submitFormTarget || @params.submitFormTarget || ""
+      submitAuto       : params.submitAuto || @params.submitAuto || "yes"
 
     @params = _p if _overrideDefault is true
     return _p
@@ -185,11 +185,11 @@ class OmiseCard
     return
 
   ###
-  # Create a token field for contain token_id that response from ifram
-  # @param {string} form
+  # Create a token field for contain token_id that response from iframe
+  # @param {string}     form
   # @param {DOM-object} buttonElem
-  # @param {object} button
-  # @return {string} Token field id
+  # @param {object}     button
+  # @return {string}    Token field id
   ###
   _createTokenField: (form, buttonElem, button) ->
     _inp            = document.createElement 'INPUT'
@@ -214,7 +214,7 @@ class OmiseCard
 
   ###
   # Generate button element on-the-fly
-  # @param {object} button
+  # @param {object}      button
   # @return {DOM-object} Button element
   ###
   _generateButton: (button) ->
@@ -230,7 +230,7 @@ class OmiseCard
 
   ###
   # Configure OmiseCard's parameters
-  # @param {object} params -
+  # @param {object} params - the same as the first 'params' argument of setParams function
   # @return {void}
   ###
   configure: (params={}) ->
@@ -240,8 +240,8 @@ class OmiseCard
 
   ###
   # Configure button's parameters
-  # @param {string} button                  - Button target id/class name
-  # @param {object} params                  - Specific parameters that want to assign into a button
+  # @param {string}  button                 - Button target id/class name
+  # @param {object}  params                 - Specific parameters that want to assign into a button
   # @param {boolean} [generateButton=false] -
   # @return {void}
   ###
@@ -317,20 +317,19 @@ scriptParent = do ->
 
 if scriptElement? and scriptElement.getAttribute("data-key")? and scriptElement.getAttribute("data-amount")?
   OmiseCardInstance.configure
-    amount            : scriptElement.getAttribute("data-amount")
-    publicKey         : scriptElement.getAttribute("data-key")
-    currency          : scriptElement.getAttribute("data-currency")
-    logo              : scriptElement.getAttribute("data-image")
-    frameLabel        : scriptElement.getAttribute("data-frame-label")
-    submitLabel       : scriptElement.getAttribute("data-submit-label")
-    buttonLabel       : scriptElement.getAttribute("data-button-label")
-    locationField     : scriptElement.getAttribute("data-location")
-    submitFormTarget  : scriptElement.getAttribute("data-form-target")
-    submitAuto        : scriptElement.getAttribute("data-submit-auto")
+    amount           : scriptElement.getAttribute("data-amount")
+    publicKey        : scriptElement.getAttribute("data-key")
+    currency         : scriptElement.getAttribute("data-currency")
+    logo             : scriptElement.getAttribute("data-image")
+    frameLabel       : scriptElement.getAttribute("data-frame-label")
+    submitLabel      : scriptElement.getAttribute("data-submit-label")
+    buttonLabel      : scriptElement.getAttribute("data-button-label")
+    locationField    : scriptElement.getAttribute("data-location")
+    submitFormTarget : scriptElement.getAttribute("data-form-target")
+    submitAuto       : scriptElement.getAttribute("data-submit-auto")
 
   OmiseCardInstance.configureButton "omisecardjs-legacy-checkout-btn", {}, true
   OmiseCardInstance.attach()
-
 
 # Export to global variable
 window._OmiseCard = OmiseCard
