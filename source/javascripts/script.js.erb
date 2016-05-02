@@ -12,7 +12,27 @@
   var errorMessage         = $("#error_message");
   var clientWindowDomain;
 
-  function formatMoney(n, c, d, t) {
+  function formatMoney(currency, amount) {
+    switch(currency.toUpperCase()) {
+      case "JPY":
+        return accounting.formatMoney(amount, {
+          symbol: "YEN",
+          precision: 0,
+          format: {
+            pos: "%s %v",
+            neg: "%s -%v",
+            zero: "%s %v"
+          }
+        });
+        break;
+
+      default:
+        return "THB" + FormatMoneySatang(parseInt(amount)/100);
+        break;
+    }
+  }
+
+  function FormatMoneySatang(n, c, d, t) {
     var c = isNaN(c = Math.abs(c)) ? 2 : c, 
         d = d == undefined ? "." : d, 
         t = t == undefined ? "," : t, 
@@ -129,7 +149,7 @@
         $("#location_fields").show();
       };
 
-      $("#amount").html(formatMoney(parseInt(data.amount)/100));
+      $("#amount").html(formatMoney(data.currency, data.amount));
 
       if (data.frameLabel) {
         $("#merchant_name").html(data.frameLabel);
