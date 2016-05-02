@@ -2,14 +2,14 @@
 
   "use strict";
 
-  var cardholderNameInput = $("#cardholder_name");
-  var cardNumberInput = $("#card_number")
+  var cardholderNameInput  = $("#cardholder_name");
+  var cardNumberInput      = $("#card_number")
   var expirationMonthInput = $("#expiration_month");
-  var expirationYearInput = $("#expiration_year");
-  var securityCodeInput = $("#security_code");
-  var postalCodeInput = $("#postal_code");
-  var cityInput = $("#city");
-  var errorMessage = $("#error_message");
+  var expirationYearInput  = $("#expiration_year");
+  var securityCodeInput    = $("#security_code");
+  var postalCodeInput      = $("#postal_code");
+  var cityInput            = $("#city");
+  var errorMessage         = $("#error_message");
   var clientWindowDomain;
 
   function formatMoney(n, c, d, t) {
@@ -45,10 +45,10 @@
 
   function validateForm() {
     var error = validateInput(cardholderNameInput);
-    error += validateInput(cardNumberInput);
-    error += validateInput(expirationMonthInput);
-    error += validateInput(expirationYearInput);
-    error += validateInput(securityCodeInput);
+        error += validateInput(cardNumberInput);
+        error += validateInput(expirationMonthInput);
+        error += validateInput(expirationYearInput);
+        error += validateInput(securityCodeInput);
 
     if (error > 0) {
       return false;
@@ -92,13 +92,13 @@
     };
 
     var card = {
-      "name": cardholderNameInput.val(),
-      "number": cardNumberInput.val(),
-      "expiration_month": expirationMonthInput.val(),
-      "expiration_year": expirationYearInput.val(),
-      "security_code": securityCodeInput.val(),
-      "postal_code": postalCodeInput.val(),
-      "city": cityInput.val()
+      "name"             : cardholderNameInput.val(),
+      "number"           : cardNumberInput.val(),
+      "expiration_month" : expirationMonthInput.val(),
+      "expiration_year"  : expirationYearInput.val(),
+      "security_code"    : securityCodeInput.val(),
+      "postal_code"      : postalCodeInput.val(),
+      "city"             : cityInput.val()
     };
 
     Omise.createToken("card", card, function (statusCode, response) {
@@ -111,8 +111,8 @@
       } else {
         resetForm();
 
-        var tokenFieldId  = $("#tokenFieldId").val();
-        var submitAuto    = $("#submitAuto").val();
+        var tokenFieldId = $("#tokenFieldId").val();
+        var submitAuto   = $("#submitAuto").val();
         parent.window.postMessage('{ "omiseToken": "' + response.id + '", "submitAuto": "'+submitAuto+'", "tokenFieldId": "'+tokenFieldId+'" }', clientWindowDomain);
       };
     });
